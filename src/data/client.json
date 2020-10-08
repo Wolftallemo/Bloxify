@@ -1,3 +1,5 @@
 {
-    "token": "Your bot token here"
+    "token": "Your bot token here",
+    "reportWebhookURL": "Webhook url here",
+    "uploadbucket": "Put bucket name here"
 }
