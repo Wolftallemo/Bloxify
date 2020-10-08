@@ -25,7 +25,34 @@ Self-hosting is recommended for advanced users only who are experienced with the
 3. Use NPM to install the dependencies from the project folder: `npm install`
 4. Edit the file `src/data/client.json` and insert your [bot token](https://discordapp.com/developers/applications/me).
 5. Start the bot from the project folder: `node ./src/index.js`
-6. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online.
+6. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online, or a systemd service if you're self-hosting on a systemd compatible linux distro.
+
+### Creating a systemd service
+
+1. Navigate to `/etc/systemd/system`
+2. Make a new file with `nano` or `vim` with `.service` as the extension.
+3. Now to create the service. You can customize it as you see fit, a sample service is below.
+   ```
+   [Unit]
+   Description=RoVer autostart on boot
+   Documentation=https://github.com/evaera/RoVer/wiki
+   After=network.target
+
+   [Service]
+   Environment=NODE_PORT=3001
+   Type=simple
+   User=root (set this to another user if you're able to!)
+   ExecStart=/usr/bin/node [path/to/index.js]
+   Restart=on-failure
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+4. Save the file (presumably with the name you made for it in step two if you named it).
+5. Enable the service: `sudo systemctl enable [name of service]`
+6. Start the service: `sudo systemctl start [name of service]`
+6b. If the bot is not online, check the logs with `sudo journalctl -eu [name of service]`
 
 ### Update Server
 
