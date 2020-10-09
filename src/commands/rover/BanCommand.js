@@ -34,12 +34,12 @@ class BanCommand extends Command {
     const reason = args.reason
     async function makeban() {
       let RBXID = 'Unknown'
-        let RBXUSER = 'Unknown'
-          try {
-            const response = await request({
-              uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
-              simple: false,
-              resolveWithFullResponse: true
+      let RBXUSER = 'Unknown'
+        try {
+          const response = await request({
+            uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
+            simple: false,
+            resolveWithFullResponse: true
           })
             RBXID = JSON.parse(response.body).Id
             RBXUSER = JSON.parse(response.body).Username
@@ -65,12 +65,12 @@ class BanCommand extends Command {
            return msg.reply('This user does not exist!')
          }
       }
-    if(config.gameModeratorRole != null) {
+    if(config.gameModeratorRole != []) {
       if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
         makeban()
       }
     }
-    else if(config.gameModeratorUsers != null){
+    else if(config.gameModeratorUsers != []){
       if (config.gameModeratorUsers.includes(msg.author.id)) {
         makeban()
       }
