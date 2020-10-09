@@ -65,14 +65,14 @@ class BanCommand extends Command {
            return msg.reply('This user does not exist!')
          }
       }
-    if(config.gameModeratorRole.length > 0) {
+    if(config.gameModeratorRole.isArray(array) && array.length) {
       if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
-        makeban()
+        return msg.reply(config.gameModeratorRole)
       }
     }
-    else if(config.gameModeratorUsers.length > 0){
+    else if((config.gameModeratorUsers.isArray(array) && array.length) && (!config.gameModeratorRole.isArray(array) || !array.length)){
       if (config.gameModeratorUsers.includes(msg.author.id)) {
-        makeban()
+        return msg.reply(config.gameModeratorUsers)
       }
     }
    else {
