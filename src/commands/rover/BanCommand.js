@@ -32,7 +32,7 @@ class BanCommand extends Command {
   async fn (msg, args) {
     const rbxuser = args.rbxuser
     const reason = args.reason
-    function makeban() {
+    async function makeban() {
       let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
           try {
