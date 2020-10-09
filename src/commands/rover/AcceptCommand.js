@@ -59,7 +59,11 @@ class AcceptCommand extends Command {
                                         'subject': 'Appeal Accepted',
                                         'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
                                     }
-                                })
+                                }),function (error,response,body) {
+                                    if (error) {
+                                        return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                    }
+                                }
                             }
                             else if ((config.mailgunRegion == 'eu') && (config.mailgunApiKey != null)) {
                                 request.post({
@@ -74,7 +78,11 @@ class AcceptCommand extends Command {
                                         'subject': 'Appeal Accepted',
                                         'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
                                     }
-                                })
+                                }),function (error,response,body) {
+                                    if (error) {
+                                        return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                    }
+                                }
                             }
                             else {
                                 return msg.reply('No Mailgun API key was provided!')
