@@ -88,8 +88,7 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "mailgunDomain"     : String. Domain used to send email.
     "mailgunRegion"     : String. Default 'us'. Specifies the region to use for the Mailgun API.
     "databaseUser"      : String. Default 'postgres'. Username pg uses to connect.
-    "databaseAddress"   : String. Default localhost. IP address or hostname of database to connect to.
+    "databaseAddress"   : String. IP address or hostname of database to connect to.
     "databaseName"      : String. Default 'postgres'. Name of database to connect to.
     "databasePassword"  : String. Password of database user.
-    "appealManagerRole" : Integer. Role that can accept/deny appeals (can also be an array).
 ```
