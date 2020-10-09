@@ -34,16 +34,14 @@ class BanCommand extends Command {
     const reason = args.reason
     if(config.gameModeratorRole.isArray(array) && array.length) {
       if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
-        
-async function makeban() {
-  let RBXID = 'Unknown'
-  let RBXUSER = 'Unknown'
-    try {
-      const response = await request({
-        uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
-        simple: false,
-        resolveWithFullResponse: true
-      })
+        let RBXID = 'Unknown'
+        let RBXUSER = 'Unknown'
+        try {
+          const response = await request({
+            uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
+            simple: false,
+            resolveWithFullResponse: true
+        })
         RBXID = JSON.parse(response.body).Id
         RBXUSER = JSON.parse(response.body).Username
       }
@@ -67,21 +65,18 @@ async function makeban() {
      else {
        return msg.reply('This user does not exist!')
      }
-  }
       }
     }
     else if((config.gameModeratorUsers.isArray(array) && array.length) && (!config.gameModeratorRole.isArray(array) || !array.length)){
       if (config.gameModeratorUsers.includes(msg.author.id)) {
-        
-async function makeban() {
-  let RBXID = 'Unknown'
-  let RBXUSER = 'Unknown'
-    try {
-      const response = await request({
-        uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
-        simple: false,
-        resolveWithFullResponse: true
-      })
+        let RBXID = 'Unknown'
+        let RBXUSER = 'Unknown'
+        try {
+          const response = await request({
+            uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
+            simple: false,
+            resolveWithFullResponse: true
+        })
         RBXID = JSON.parse(response.body).Id
         RBXUSER = JSON.parse(response.body).Username
       }
@@ -105,7 +100,6 @@ async function makeban() {
      else {
        return msg.reply('This user does not exist!')
      }
-  }
       }
     }
    else {
