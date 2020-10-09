@@ -18,6 +18,7 @@ const DefaultSettings = {
   announceChannel: null,
   nicknameFormat: '%USERNAME%',
   welcomeMessage: 'Welcome to %SERVER%, %USERNAME%!',
+  adminRoles: [],
   groupRankBindings: []
 }
 
