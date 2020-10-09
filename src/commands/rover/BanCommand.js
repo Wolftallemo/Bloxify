@@ -65,12 +65,12 @@ class BanCommand extends Command {
            return msg.reply('This user does not exist!')
          }
       }
-    if(config.gameModeratorRole != []) {
+    if(config.gameModeratorRole.length > 0) {
       if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
         makeban()
       }
     }
-    else if(config.gameModeratorUsers != []){
+    else if(config.gameModeratorUsers.length > 0){
       if (config.gameModeratorUsers.includes(msg.author.id)) {
         makeban()
       }
