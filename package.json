@@ -1,13 +1,14 @@
 {
   "dependencies": {
+    "@google-cloud/storage": "^5.3.0",
     "bufferutil": "^4.0.1",
     "common-tags": "^1.7.2",
     "discord.js": "^12.2.0",
-    "discord.js-commando": "git://github.com/discordjs/Commando.git#bdbd84e2a978322f3af12c21e729eb7b7cd4a3dc",
-    "erlpack": "github:discord/erlpack",
+    "discord.js-commando": "https://github.com/discordjs/Commando.git",
     "erlpack": "discordapp/erlpack",
-    "express": "^4.15.2",
+    "express": "^4.17.1",
     "mz": "^2.6.0",
+    "pg": "^8.3.3",
     "request": "^2.81.0",
     "request-debug": "^0.2.0",
     "request-promise": "^4.2.0",
@@ -19,8 +20,8 @@
   "name": "rover",
   "version": "1.0.0",
   "main": "src/index.js",
-  "repository": "https://github.com/evaera/RoVer",
-  "author": "evaera",
+  "repository": "https://github.com/Wolftallemo/Virgil",
+  "author": "Wolftallemo",
   "license": "Apache-2.0",
   "scripts": {
     "test": "standard",
