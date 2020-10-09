@@ -1,9 +1,10 @@
 const { Client } = require('pg')
+const dbconfig = require('./data/client.json')
 const client = new Client({
-    user: config.databaseUser,
-    host: config.databaseAddress,
-    database: config.databaseName,
-    password: config.databasePassword,
+    user: dbconfig.databaseUser,
+    host: dbconfig.databaseAddress,
+    database: dbconfig.databaseName,
+    password: dbconfig.databasePassword,
     port: 5432,
 })
 
