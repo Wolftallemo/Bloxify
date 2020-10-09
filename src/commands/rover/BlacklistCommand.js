@@ -24,7 +24,7 @@ class BlacklistCommand extends Command {
 
   async fn (msg, args) {
     const rbxuser = args.rbxuser
-    if ((msg.member.roles.cache.find(role => role.id == config.gameModeratorRole)) || ((modusers.includes(msg.author.id)))) {
+    if ((msg.member.roles.cache.some(roleslist => config.appealsManagerRole.includes(roleslist))) || ((modusers.includes(msg.author.id)))) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
           try {

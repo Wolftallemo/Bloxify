@@ -37,7 +37,7 @@ class AcceptCommand extends Command {
     async fn (msg, args) {
         const appealuser = [args.userid]
         const findappeal = `SELECT * FROM appeals WHERE discord_id = $1;`
-        if (msg.member.roles.cache.find(role => config.appealManagerRole.includes(role.id))) {
+        if (msg.member.roles.cache.some(roleslist => config.appealsManagerRole.includes(roleslist))) {
             client.connect()
             client.query(findappeal,appealuser)
             .then(foundinfo => {
