@@ -8,5 +8,6 @@
     "databaseAddress": "Put the hostname or ip address of postgresql database here",
     "databaseUser": "Username to connect to database with",
     "databaseName": "Database name goes here (typically it's 'postgres' unless you make a different one)",
-    "databasePassword": "Database user password goes here"
+    "databasePassword": "Database user password goes here",
+    "mailgunApiKey": "This needs to be base64 encoded"
 }
