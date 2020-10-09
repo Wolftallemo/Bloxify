@@ -1,6 +1,5 @@
 {
     "token": "Your bot token here",
-    "adminRole": "Role ID goes here",
     "reportWebhookURL": "Webhook url here",
     "bucket": "Put bucket name here",
     "serviceKeyPath": "Path to service account key, generate one in IAM if you do not have one",
