@@ -85,8 +85,11 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "bucket"            : String. Google Cloud Storage bucket used to store game ban information.
     "fromAddress"       : String. Email address that appears in the 'From' field.
     "mailgunApiKey"     : String. Base64 encoded api key provided by mailgun. (Must encode it yourself)
+    "mailgunDomain"     : String. Domain used to send email.
+    "mailgunRegion"     : String. Default 'us'. Specifies the region to use for the Mailgun API.
     "databaseUser"      : String. Default 'postgres'. Username pg uses to connect.
-    "databaseAddress"   : String. IP address or hostname of database to connect to.
+    "databaseAddress"   : String. Default localhost. IP address or hostname of database to connect to.
     "databaseName"      : String. Default 'postgres'. Name of database to connect to.
     "databasePassword"  : String. Password of database user.
+    "appealManagerRole" : Integer. Role that can accept/deny appeals (can also be an array).
 ```
