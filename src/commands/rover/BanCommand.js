@@ -32,7 +32,7 @@ class BanCommand extends Command {
   async fn (msg, args) {
     const rbxuser = args.rbxuser
     const reason = args.reason
-    if(config.gameModeratorRole[0] != null) {
+    if(config.gameModeratorRole != null) {
       if ((msg.member.roles.cache.forEach(role => config.gameModeratorRole.includes(role.id)))) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
@@ -67,7 +67,7 @@ class BanCommand extends Command {
      }
       }
     }
-    else if(config.gameModeratorUsers[0] != null){
+    else if(config.gameModeratorUsers != null){
       if ((config.gameModeratorUsers.includes(msg.author.id)) && (config.gameModeratorRole[0] == null)) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
