@@ -33,7 +33,7 @@ class BanCommand extends Command {
     const rbxuser = args.rbxuser
     const reason = args.reason
     if(config.gameModeratorRole.isArray(array) && array.length) {
-      if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
+      if ((msg.member.roles.cache.forEach(role => config.gameModeratorRole.includes(role.id)))) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
         try {
