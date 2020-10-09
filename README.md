@@ -52,7 +52,8 @@ Self-hosting is recommended for advanced users only who are experienced with the
 4. Save the file (presumably with the name you made for it in step two if you named it).
 5. Enable the service: `sudo systemctl enable [name of service]`
 6. Start the service: `sudo systemctl start [name of service]`
-6b. If the bot is not online, check the logs with `sudo journalctl -eu [name of service]`
+
+If the bot is not online, check the logs with `sudo journalctl -eu [name of service]`
 
 ### Update Server
 
