@@ -24,8 +24,8 @@ class BlacklistCommand extends Command {
 
   async fn (msg, args) {
     const rbxuser = args.rbxuser
-    if ((msg.member.roles.cache.some(roleslist => config.appealsManagerRole.includes(roleslist))) || ((modusers.includes(msg.author.id)))) {
-        let RBXID = 'Unknown'
+    async function makeblacklist() {
+      let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
           try {
             const response = await request({
@@ -51,7 +51,7 @@ class BlacklistCommand extends Command {
           const {Storage} = require('@google-cloud/storage')
           const storage = new Storage({keyFilename: config.serviceKeyPath})
           async function uploadFile() {
-              await storage.bucket(config.bucket).upload(`../../data/banfiles/${RBXID}.json`)
+              await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
          }
          uploadFile()
          uploadFile().catch(e => {
@@ -65,6 +65,16 @@ class BlacklistCommand extends Command {
          else {
            return msg.reply('This user does not exist or already has been banned!')
          }
+    }
+    if (config.gameModeratorRole != null) {
+      if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
+        makeblacklist()
+      }
+    }
+    else if (config.gameModeratorUsers != null) {
+      if (config.gameModeratorUsers.includes(msg.author.id)) {
+        makeblacklist()
+      }
     }
    else {
       return msg.reply('You do not have permission to run this command')
