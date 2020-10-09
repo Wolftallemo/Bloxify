@@ -10,12 +10,12 @@ const client = new Client({
     port: 5432,
 })
 module.exports =
-class AcceptCommand extends Command {
+class DenyCommand extends Command {
     constructor (client) {
         super(client, {
-            name: 'accept',
-            properName: 'Accept',
-            description:'Accepts a user\'s appeal',
+            name: 'deny',
+            properName: 'Deny',
+            description:'Denies a user\'s appeal',
             userPermissions: [],
             args: [
                 {
@@ -32,11 +32,12 @@ class AcceptCommand extends Command {
                     default: 'No further information provided by the moderation team.'
                 }
             ]
+            /* Don't set the type to integer else it won't work. */
         })
     }
     async fn (msg, args) {
         const appealuser = [args.userid]
-        const findappeal = `SELECT * FROM appeals WHERE discord_id = $1;`
+        const findappeal = 'SELECT * from appeals WHERE discord_id = $1;'
         if (msg.member.roles.cache.find(role => config.appealManagerRole.includes(role.id))) {
             client.connect()
             client.query(findappeal,appealuser)
@@ -55,7 +56,7 @@ class AcceptCommand extends Command {
                                 formData: {
                                     'from': config.fromAddress,
                                     'to': foundemail.rows[0].email,
-                                    'subject': 'Appeal Accepted',
+                                    'subject': 'Appeal Denied',
                                     'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
                                 }
                             })
@@ -70,7 +71,7 @@ class AcceptCommand extends Command {
                                 formData: {
                                     'from': config.fromAddress,
                                     'to': foundemail.rows[0].email,
-                                    'subject': 'Appeal Accepted',
+                                    'subject': 'Appeal Denied',
                                     'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
                                 }
                             })
@@ -83,7 +84,7 @@ class AcceptCommand extends Command {
                     const markasresolved = 'DELETE FROM appeals WHERE discord_id = $1;'
                     client.query(markasresolved,appealuser)
                     .catch(e => console.error(e.stack))
-                    return msg.reply('Appeal accepted and user emailed!')
+                    return msg.reply('Appeal denied and user emailed!')
                 }
                 else {
                     return msg.reply('There are no unresolved appeals under this user account!')
