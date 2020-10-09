@@ -1,3 +1,4 @@
+const { Client } = require('pg')
 const client = new Client({
     user: config.databaseUser,
     host: config.databaseAddress,
