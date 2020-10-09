@@ -34,7 +34,7 @@ Self-hosting is recommended for advanced users only who are experienced with the
 3. Now to create the service. You can customize it as you see fit, a sample service is below.
    ```
    [Unit]
-   Description=RoVer autostart on boot
+   Description=Virgil autostart on boot
    Documentation=https://github.com/evaera/RoVer/wiki
    After=network.target
 
@@ -52,8 +52,7 @@ Self-hosting is recommended for advanced users only who are experienced with the
 4. Save the file (presumably with the name you made for it in step two if you named it).
 5. Enable the service: `sudo systemctl enable [name of service]`
 6. Start the service: `sudo systemctl start [name of service]`
-
-If the bot is not online, check the logs with `sudo journalctl -eu [name of service]`
+6b. If the bot is not online, check the logs with `sudo journalctl -eu [name of service]`
 
 ### Update Server
 
@@ -81,4 +80,13 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "shardLifeTime"     : Integer. Number of seconds each shard will run before closing.
     "mainLifeTime"      : Integer. Number of seconds the main process will run before closing. (Need a process manager if you want it to relaunch)
     "maxServerBindings" : Integer. Default unlimited. Maximum number of bindings allowed per server
+    "reportWebhookURL"  : String. Webhook used to notify game moderators of exploiters when using the report command.
+    "serviceKeyPath"    : String. Path to service key file that authenticates bot with Google Cloud Storage.
+    "bucket"            : String. Google Cloud Storage bucket used to store game ban information.
+    "fromAddress"       : String. Email address that appears in the 'From' field.
+    "mailgunApiKey"     : String. Base64 encoded api key provided by mailgun. (Must encode it yourself)
+    "databaseUser"      : String. Default 'postgres'. Username pg uses to connect.
+    "databaseAddress"   : String. IP address or hostname of database to connect to.
+    "databaseName"      : String. Default 'postgres'. Name of database to connect to.
+    "databasePassword"  : String. Password of database user.
 ```
