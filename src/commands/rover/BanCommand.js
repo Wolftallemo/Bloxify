@@ -60,15 +60,18 @@ class BanCommand extends Command {
      uploadFile().catch(e => {
        return msg.reply(e.response.statusMessage)
      })
-     return msg.reply(`${RBXUSER} successfully banned! 1`)
+     return msg.reply(`${RBXUSER} successfully banned!`)
     }
      else {
        return msg.reply('This user does not exist!')
      }
       }
+      else {
+        return msg.reply('You cannot run this command!')
+      }
     }
     else if(config.gameModeratorUsers != null){
-      if ((config.gameModeratorUsers.includes(msg.author.id)) && (config.gameModeratorRole[0] == null)) {
+      if ((config.gameModeratorUsers.includes(msg.author.id)) && (config.gameModeratorRole == null)) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
         try {
@@ -95,15 +98,18 @@ class BanCommand extends Command {
      uploadFile().catch(e => {
        return msg.reply(e.response.statusMessage)
      })
-     return msg.reply(`${RBXUSER} successfully banned! 2`)
+     return msg.reply(`${RBXUSER} successfully banned!`)
     }
      else {
        return msg.reply('This user does not exist!')
      }
       }
+      else {
+        return msg.reply('You cannot run this command!')
+      }
     }
    else {
-      return msg.reply('You do not have permission to run this command')
+      return msg.reply('Roles/users were not provided!')
     }
   }
 }
