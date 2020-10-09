@@ -24,56 +24,92 @@ class BlacklistCommand extends Command {
 
   async fn (msg, args) {
     const rbxuser = args.rbxuser
-    async function makeblacklist() {
-      let RBXID = 'Unknown'
+    if (config.gameModeratorRole != null) {
+      if ((msg.member.roles.cache.forEach(role => config.gameModeratorRole.includes(role.id)))) {
+        let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
           try {
             const response = await request({
               uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
               simple: false,
               resolveWithFullResponse: true
-          })
-            RBXID = JSON.parse(response.body).Id
-            RBXUSER = JSON.parse(response.body).Username}
-          catch (e) {
-            return msg.reply(`An error occured! ${e}`)
+            })
+              RBXID = JSON.parse(response.body).Id
+              RBXUSER = JSON.parse(response.body).Username}
+            catch (e) {
+              return msg.reply(`An error occured! ${e}`)
+            }
+            const banexists = await request({
+              uri: `https://storage.googleapis.com/${config.bucket}/${RBXID}.json`,
+              simple: false,
+              resolveWithFullResponse: true
+            })
+            if (RBXID != undefined) {
+              if((banexists.statusCode == 404) || (JSON.parse(banexists.body).usercode != '0x2')) {
+            fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`, `{"usercode":"0x1"}`, function (err) {
+              if (err) return msg.reply(err)
+            })
+            const {Storage} = require('@google-cloud/storage')
+            const storage = new Storage({keyFilename: config.serviceKeyPath})
+            async function uploadFile() {
+                await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
+           }
+           uploadFile()
+           uploadFile().catch(e => {
+             return msg.reply(e.response.statusMessage)
+           })
+           return msg.reply(`${RBXUSER} successfully blacklisted!`)
           }
-          const banexists = await request({
-            uri: `https://storage.googleapis.com/${config.bucket}/${RBXID}.json`,
-            simple: false,
-            resolveWithFullResponse: true
-          })
-          if (RBXID != undefined) {
-            if((banexists.statusCode == 404) || (JSON.parse(banexists.body).usercode != '0x2')) {
-          fs.writeFileSync(`../../data/banfiles/${RBXID}.json`, `{"usercode":"0x1"}`, function (err) {
-            if (err) return msg.reply(err)
-          })
-          const {Storage} = require('@google-cloud/storage')
-          const storage = new Storage({keyFilename: config.serviceKeyPath})
-          async function uploadFile() {
-              await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
-         }
-         uploadFile()
-         uploadFile().catch(e => {
-           return msg.reply(e.response.statusMessage)
-         })
-         return msg.reply(`${RBXUSER} successfully blacklisted!`)
-        }
-      else {
-        return msg.reply('User is already banned!')
-      }}
-         else {
-           return msg.reply('This user does not exist or already has been banned!')
-         }
-    }
-    if (config.gameModeratorRole != null) {
-      if ((msg.member.roles.cache.some(roles => config.gameModeratorRole.includes(roles)))) {
-        makeblacklist()
+        else {
+          return msg.reply('User is already banned!')
+        }}
+           else {
+             return msg.reply('This user does not exist or already has been banned!')
+           }
       }
     }
     else if (config.gameModeratorUsers != null) {
-      if (config.gameModeratorUsers.includes(msg.author.id)) {
-        makeblacklist()
+      if ((config.gameModeratorUsers.includes(msg.author.id)) && (config.gameModeratorRole == null)) {
+        let RBXID = 'Unknown'
+        let RBXUSER = 'Unknown'
+          try {
+            const response = await request({
+              uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
+              simple: false,
+              resolveWithFullResponse: true
+            })
+              RBXID = JSON.parse(response.body).Id
+              RBXUSER = JSON.parse(response.body).Username}
+            catch (e) {
+              return msg.reply(`An error occured! ${e}`)
+            }
+            const banexists = await request({
+              uri: `https://storage.googleapis.com/${config.bucket}/${RBXID}.json`,
+              simple: false,
+              resolveWithFullResponse: true
+            })
+            if (RBXID != undefined) {
+              if((banexists.statusCode == 404) || (JSON.parse(banexists.body).usercode != '0x2')) {
+            fs.writeFileSync(`../../data/banfiles/${RBXID}.json`, `{"usercode":"0x1"}`, function (err) {
+              if (err) return msg.reply(err)
+            })
+            const {Storage} = require('@google-cloud/storage')
+            const storage = new Storage({keyFilename: config.serviceKeyPath})
+            async function uploadFile() {
+                await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
+           }
+           uploadFile()
+           uploadFile().catch(e => {
+             return msg.reply(e.response.statusMessage)
+           })
+           return msg.reply(`${RBXUSER} successfully blacklisted!`)
+          }
+        else {
+          return msg.reply('User is already banned!')
+        }}
+           else {
+             return msg.reply('This user does not exist or already has been banned!')
+           }
       }
     }
    else {
