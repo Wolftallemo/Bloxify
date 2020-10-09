@@ -32,7 +32,7 @@ class BanCommand extends Command {
   async fn (msg, args) {
     const rbxuser = args.rbxuser
     const reason = args.reason
-    if ((msg.member.roles.cache.some(roleslist => config.appealsManagerRole.includes(roleslist))) || ((modusers.includes(msg.author.id)))) {
+    if (((msg.member.roles.cache.some(roleslist => config.appealsManagerRole.includes(roleslist))) && config.appealsManagerRole != null) || ((modusers.includes(msg.author.id)) && (modusers != null))) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
           try {
