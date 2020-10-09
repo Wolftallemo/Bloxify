@@ -7,5 +7,6 @@ const client = new Client({
     password: dbconfig.databasePassword,
     port: 5432,
 })
+client.connect()
 
 module.exports = client
