@@ -9,7 +9,7 @@ function sendemail() {
             'Authorization': `Basic ${config.mailgunApiKey}`
         },
         formData:{
-            'from': `noreply@${mailgunDomain}`,
+            'from': config.fromAddress,
             'to': sendTo,
             'subject': emailSubject,
             'html': emailBodyHtml

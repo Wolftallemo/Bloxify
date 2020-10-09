@@ -9,6 +9,5 @@
     "databaseUser": "Username to connect to database with",
     "databaseName": "Database name goes here (typically it's 'postgres' unless you make a different one)",
     "databasePassword": "Database user password goes here",
-    "mailgunApiKey": "Base64 encoded api key",
-    "mailgunDomain": "example.com"
+    "mailgunApiKey": "Base64 encoded api key"
 }
