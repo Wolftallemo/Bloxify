@@ -1,12 +1,3 @@
 {
     "token": "Your bot token here",
-    "reportWebhookURL": "Webhook url here",
-    "bucket": "Put bucket name here",
-    "serviceKeyPath": "Path to service account key, generate one in IAM if you do not have one",
-    "fromAddress": "noreply@example.com",
-    "databaseAddress": "Put the hostname or ip address of postgresql database here",
-    "databaseUser": "Username to connect to database with",
-    "databaseName": "Database name goes here (typically it's 'postgres' unless you make a different one)",
-    "databasePassword": "Database user password goes here",
-    "mailgunApiKey": "Base64 encoded api key"
 }
