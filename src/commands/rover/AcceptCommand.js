@@ -1,14 +1,8 @@
 const Command = require('../Command')
-const { Client } = require('pg')
+const client = require('../../Database')
 const config = require('../../data/client.json')
 const request = require('request')
-const client = new Client({
-    user: config.databaseUser,
-    host: config.databaseAddress,
-    database: config.databaseName,
-    password: config.databasePassword,
-    port: 5432,
-})
+
 module.exports =
 class AcceptCommand extends Command {
     constructor (client) {
@@ -39,7 +33,6 @@ class AcceptCommand extends Command {
         const findappeal = `SELECT * FROM appeals WHERE discord_id = $1;`
         if ((config.appealsManagerRole != null) && (config.mailgunApiKey != null) && (config.mailgunDomain != null) && (config.fromAddress != null)){
             if (msg.member.roles.cache.filter(role => config.appealsManagerRole.includes(role.id))) {
-                client.connect()
                 client.query(findappeal,appealuser)
                 .then(foundinfo => {
                     if(foundinfo.rows[0] != null) {
