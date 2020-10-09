@@ -60,7 +60,7 @@ class BanCommand extends Command {
      uploadFile().catch(e => {
        return msg.reply(e.response.statusMessage)
      })
-     return msg.reply(`${RBXUSER} successfully banned!`)
+     return msg.reply(`${RBXUSER} successfully banned! 1`)
     }
      else {
        return msg.reply('This user does not exist!')
@@ -95,7 +95,7 @@ class BanCommand extends Command {
      uploadFile().catch(e => {
        return msg.reply(e.response.statusMessage)
      })
-     return msg.reply(`${RBXUSER} successfully banned!`)
+     return msg.reply(`${RBXUSER} successfully banned! 2`)
     }
      else {
        return msg.reply('This user does not exist!')
