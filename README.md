@@ -93,4 +93,5 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "databasePassword"  : String. Password of database user.
     "gameModeratorRole" : Integer. Role which are authorized to issue game bans/leaderboard blacklists.
     "gameModeratorUsers": Integer. User IDs which are authorized to issue game bans/leaderboard blacklists (is array).
+    "banFilesPath"      : String. Path to directory which ban json files are stored (path cannot be relative).
 ```
