@@ -67,8 +67,8 @@ class BanCommand extends Command {
          }
       }
     }
-    else if(config.gameModeratorUser != null){
-      if (modusers.includes(msg.author.id)) {
+    else if(config.gameModeratorUsers != null){
+      if (config.gameModeratorUsers.includes(msg.author.id)) {
         let RBXID = 'Unknown'
         let RBXUSER = 'Unknown'
           try {
