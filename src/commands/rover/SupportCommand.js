@@ -8,12 +8,12 @@ class SupportServerCommand extends Command {
       properName: 'Support',
       aliases: ['server'],
       userPermissions: [],
-      description: 'Posts an invite link to the Official RoVer Discord where you can easily get help.'
+      description: 'Displays contact information of bot developer'
     })
   }
 
   async fn (msg) {
-    msg.author.send('Having trouble? You can join our official support discord here: discord.gg/7yfwrat, or you can check out the documentation here: https://rover.link/#readme').then(() => {
+    msg.author.send('Having trouble? DM Wolftallemo#0666, or you can check out the documentation here: https://rover.link/#readme').then(() => {
       msg.reply('Sent you a DM with information.')
     }).catch(() => {
       msg.reply('I can\'t seem to message you - please make sure your DMs are enabled!')
