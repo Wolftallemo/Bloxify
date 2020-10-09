@@ -22,12 +22,12 @@ Self-hosting is recommended for advanced users only who are experienced with the
 
 1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on.
 2. **Node.js version 8.9.4 LTS or newer is recommended to run RoVer.**
-3. Use NPM to install the dependencies from the project folder: `npm install`
+3. Use NPM to install the dependencies from the project folder: `npm i`
 4. Edit the file `src/data/client.json` and insert your [bot token](https://discordapp.com/developers/applications/me).
 5. Start the bot from the project folder: `node ./src/index.js`
 6. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online, or a systemd service if you're self-hosting on a systemd compatible linux distro.
 
-### Creating a systemd service
+### Creating a systemd service (Systemd-compatible Linux distros only)
 
 1. Navigate to `/etc/systemd/system`
 2. Make a new file with `nano` or `vim` with `.service` as the extension.
