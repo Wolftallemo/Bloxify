@@ -17,7 +17,7 @@
     "uws": "^10.148.0",
     "zlib-sync": "^0.1.7"
   },
-  "name": "rover",
+  "name": "Virgil",
   "version": "1.0.0",
   "main": "src/index.js",
   "repository": "https://github.com/Wolftallemo/Virgil",
