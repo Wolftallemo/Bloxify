@@ -39,7 +39,7 @@ class AcceptCommand extends Command {
                         const getemailquery = 'SELECT * FROM auth WHERE discord_id = $1;'
                         client.query(getemailquery,appealuser)
                         .then(foundemail => {
-                            if (((config.mailgunRegion == 'us') || (config.mailgunRegion == null)) && (config.mailgunApiKey != null)) {
+                            if ((config.mailgunRegion != 'eu') && (config.mailgunApiKey != null)) {
                                 request.post({
                                     uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
                                     headers: {
