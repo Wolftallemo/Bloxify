@@ -84,7 +84,7 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "serviceKeyPath"    : String. Path to service key file that authenticates bot with Google Cloud Storage.
     "bucket"            : String. Google Cloud Storage bucket used to store game ban information.
     "fromAddress"       : String. Email address that appears in the 'From' field.
-    "mailgunApiKey"     : String. Base64 encoded api key provided by mailgun. (Must encode it yourself)
+    "mailgunApiKey"     : String. Base64 encoded api key provided by mailgun. (You must encode it yourself and make sure you add 'api:' to the beginning if you haven't already.)
     "mailgunDomain"     : String. Domain used to send email.
     "mailgunRegion"     : String. Default 'us'. Specifies the region to use for the Mailgun API.
     "databaseUser"      : String. Default 'postgres'. Username pg uses to connect.
@@ -94,4 +94,5 @@ The *Update Server* is an optional part of RoVer that can be enabled in `client.
     "gameModeratorRole" : Integer. Role which are authorized to issue game bans/leaderboard blacklists.
     "gameModeratorUsers": Integer. User IDs which are authorized to issue game bans/leaderboard blacklists (is array).
     "banFilesPath"      : String. Path to directory which ban json files are stored (path cannot be relative).
+    "appealsInvite"     : String. Discord server invite sent to the user when appeal is accepted.
 ```

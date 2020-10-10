@@ -35,6 +35,12 @@ class AcceptCommand extends Command {
             if (msg.member.roles.cache.filter(role => config.appealsManagerRole.includes(role.id))) {
                 client.query(findappeal,appealuser)
                 .then(foundinfo => {
+                    const email = {
+                        'from': config.fromAddress,
+                        'to': foundemail.rows[0].email,
+                        'subject': 'Appeal Accepted',
+                        'html': `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}"<br/><br/>Note from the moderation team: ${args.note}</html>`
+                    }
                     if(foundinfo.rows[0] != null) {
                         const getemailquery = 'SELECT * FROM auth WHERE discord_id = $1;'
                         client.query(getemailquery,appealuser)
@@ -46,18 +52,13 @@ class AcceptCommand extends Command {
                                         'Content-Type': 'multipart/form-data',
                                         'Authorization': `Basic ${config.mailgunApiKey}`
                                     },
-                                    formData: {
-                                        'from': config.fromAddress,
-                                        'to': foundemail.rows[0].email,
-                                        'subject': 'Appeal Accepted',
-                                        'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
-                                    }
+                                    formData: email
                                 },function (error,response,body) {
-                                    if (error) {
-                                        return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                    if (response.statusCode == 200) {
+                                        return msg.reply('Appeal accepted and user emailed!')
                                     }
                                     else {
-                                        return msg.reply('Appeal accepted and user emailed!')
+                                        return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                                     }
                                 })
                             }
@@ -68,18 +69,13 @@ class AcceptCommand extends Command {
                                         'Content-Type': 'multipart/form-data',
                                         'Authorization': `Basic ${config.mailgunApiKey}`
                                     },
-                                    formData: {
-                                        'from': config.fromAddress,
-                                        'to': foundemail.rows[0].email,
-                                        'subject': 'Appeal Accepted',
-                                        'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
-                                    }
+                                    formData: email
                                 },function (error,response,body) {
-                                    if (error) {
-                                        return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                    if (response.statusCode == 200) {
+                                        return msg.reply('Appeal accepted and user emailed!')
                                     }
                                     else {
-                                        return msg.reply('Appeal accepted and user emailed!')
+                                        return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                                     }
                                 })
                             }
@@ -100,7 +96,7 @@ class AcceptCommand extends Command {
             }
         }
         else {
-            return msg.reply('Make sure your appeal roles and mailgun information are set!')
+            return msg.reply('Make sure your appeal manager roles and mailgun information are set!')
         }
     }
 }
