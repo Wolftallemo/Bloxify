@@ -35,16 +35,16 @@ class AcceptCommand extends Command {
             if (msg.member.roles.cache.filter(role => config.appealsManagerRole.includes(role.id))) {
                 client.query(findappeal,appealuser)
                 .then(foundinfo => {
-                    const email = {
-                        'from': config.fromAddress,
-                        'to': foundemail.rows[0].email,
-                        'subject': 'Appeal Accepted',
-                        'html': `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}"<br/><br/>Note from the moderation team: ${args.note}</html>`
-                    }
                     if(foundinfo.rows[0] != null) {
                         const getemailquery = 'SELECT * FROM auth WHERE discord_id = $1;'
                         client.query(getemailquery,appealuser)
                         .then(foundemail => {
+                            const email = {
+                                'from': config.fromAddress,
+                                'to': foundemail.rows[0].email,
+                                'subject': 'Appeal Accepted',
+                                'html': `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}"<br/><br/>Note from the moderation team: ${args.note}</html>`
+                            }
                             if (config.mailgunRegion != 'eu') {
                                 request.post({
                                     uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
