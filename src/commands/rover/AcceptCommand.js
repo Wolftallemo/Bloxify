@@ -39,55 +39,60 @@ class AcceptCommand extends Command {
                         const getemailquery = 'SELECT * FROM auth WHERE discord_id = $1;'
                         client.query(getemailquery,appealuser)
                         .then(foundemail => {
-                            if (config.mailgunRegion != 'eu') {
-                                request.post({
-                                    uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
-                                    headers: {
-                                        'Content-Type': 'multipart/form-data',
-                                        'Authorization': `Basic ${config.mailgunApiKey}`
-                                    },
-                                    formData: {
-                                        'from': config.fromAddress,
-                                        'to': foundemail.rows[0].email,
-                                        'subject': 'Appeal Accepted',
-                                        'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
+                            if (config.mailgunApiKey != null) {
+                                if (config.mailgunRegion != 'eu') {
+                                    request.post({
+                                        uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
+                                        headers: {
+                                            'Content-Type': 'multipart/form-data',
+                                            'Authorization': `Basic ${config.mailgunApiKey}`
+                                        },
+                                        formData: {
+                                            'from': config.fromAddress,
+                                            'to': foundemail.rows[0].email,
+                                            'subject': 'Appeal Accepted',
+                                            'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
+                                        }
+                                    }),function (error,response,body) {
+                                        if (error) {
+                                            return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                        }
+                                        else if (response.statusCode != ((200) || (204))) {
+                                            return msg.reply(`HMMMMMMMMMMM Something fishy happened. Response: ${body}`)
+                                        }
+                                        else {
+                                            return msg.reply('Appeal accepted and user emailed!')
+                                        }
                                     }
-                                }),function (error,response,body) {
-                                    if (error) {
-                                        return msg.reply(`Error returned by Mailgun! Error: ${error}`)
-                                    }
-                                    else if (response.statusCode != ((200) || (204))) {
-                                        return msg.reply(`HMMMMMMMMMMM Something fishy happened. Response: ${body}`)
-                                    }
-                                    else {
-                                        return msg.reply('Appeal accepted and user emailed!')
+                                }
+                                else {
+                                    request.post({
+                                        uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
+                                        headers: {
+                                            'Content-Type': 'multipart/form-data',
+                                            'Authorization': `Basic ${config.mailgunApiKey}`
+                                        },
+                                        formData: {
+                                            'from': config.fromAddress,
+                                            'to': foundemail.rows[0].email,
+                                            'subject': 'Appeal Accepted',
+                                            'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
+                                        }
+                                    }),function (error,response,body) {
+                                        if (error) {
+                                            return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                        }
+                                        else if (response.statusCode != ((200) || (204))) {
+                                            return msg.reply(`HMMMMMMMMMMM Something fishy happened. Response: ${body}`)
+                                        }
+                                        else {
+                                            return msg.reply('Appeal accepted and user emailed!')
+                                        }
                                     }
                                 }
                             }
                             else {
-                                request.post({
-                                    uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
-                                    headers: {
-                                        'Content-Type': 'multipart/form-data',
-                                        'Authorization': `Basic ${config.mailgunApiKey}`
-                                    },
-                                    formData: {
-                                        'from': config.fromAddress,
-                                        'to': foundemail.rows[0].email,
-                                        'subject': 'Appeal Accepted',
-                                        'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
-                                    }
-                                }),function (error,response,body) {
-                                    if (error) {
-                                        return msg.reply(`Error returned by Mailgun! Error: ${error}`)
-                                    }
-                                    else if (response.statusCode != ((200) || (204))) {
-                                        return msg.reply(`HMMMMMMMMMMM Something fishy happened. Response: ${body}`)
-                                    }
-                                    else {
-                                        return msg.reply('Appeal accepted and user emailed!')
-                                    }
-                                }
+                                return msg.reply('Mailgun API key was not set!')
                             }
                         })
                         .catch(e => console.error(e.stack))
