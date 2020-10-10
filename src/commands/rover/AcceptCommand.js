@@ -56,6 +56,12 @@ class AcceptCommand extends Command {
                                     if (error) {
                                         return msg.reply(`Error returned by Mailgun! Error: ${error}`)
                                     }
+                                    else if (response.statusCode != ((200) || (204))) {
+                                        return msg.reply(`HMMMMMMMMMMM Something fishy happened. Response: ${body}`)
+                                    }
+                                    else {
+                                        return msg.reply('Appeal accepted and user emailed!')
+                                    }
                                 }
                             }
                             else if ((config.mailgunRegion == 'eu') && (config.mailgunApiKey != null)) {
@@ -74,6 +80,12 @@ class AcceptCommand extends Command {
                                 }),function (error,response,body) {
                                     if (error) {
                                         return msg.reply(`Error returned by Mailgun! Error: ${error}`)
+                                    }
+                                    else if (response.statusCode != ((200) || (204))) {
+                                        return msg.reply(`HMMMMMMMMMMM Something fishy happened. Response: ${body}`)
+                                    }
+                                    else {
+                                        return msg.reply('Appeal accepted and user emailed!')
                                     }
                                 }
                             }
