@@ -39,7 +39,7 @@ class AcceptCommand extends Command {
                         const getemailquery = 'SELECT * FROM auth WHERE discord_id = $1;'
                         client.query(getemailquery,appealuser)
                         .then(foundemail => {
-                            if ((config.mailgunRegion != 'eu') && (config.mailgunApiKey != null)) {
+                            if (config.mailgunRegion != 'eu') {
                                 request.post({
                                     uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
                                     headers: {
@@ -64,7 +64,7 @@ class AcceptCommand extends Command {
                                     }
                                 }
                             }
-                            else if ((config.mailgunRegion == 'eu') && (config.mailgunApiKey != null)) {
+                            else {
                                 request.post({
                                     uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
                                     headers: {
@@ -89,15 +89,11 @@ class AcceptCommand extends Command {
                                     }
                                 }
                             }
-                            else {
-                                return msg.reply('No Mailgun API key was provided!')
-                            }
                         })
                         .catch(e => console.error(e.stack))
                         const markasresolved = 'DELETE FROM appeals WHERE discord_id = $1;'
                         client.query(markasresolved,appealuser)
                         .catch(e => console.error(e.stack))
-                        return msg.reply('Appeal accepted and user emailed!')
                     }
                     else {
                         return msg.reply('There are no unresolved appeals under this user account!')
