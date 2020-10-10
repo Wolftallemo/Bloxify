@@ -52,14 +52,14 @@ class AcceptCommand extends Command {
                                         'subject': 'Appeal Accepted',
                                         'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
                                     }
-                                }),function (error,response,body) {
+                                },function (error,response,body) {
                                     if (error) {
                                         return msg.reply(`Error returned by Mailgun! Error: ${error}`)
                                     }
                                     else {
                                         return msg.reply('Appeal accepted and user emailed!')
                                     }
-                                }
+                                })
                             }
                             else {
                                 request.post({
@@ -74,14 +74,14 @@ class AcceptCommand extends Command {
                                         'subject': 'Appeal Accepted',
                                         'html': `<html>Sample text.\n\nNote from the moderation team: ${args.note}</html>`
                                     }
-                                }),function (error,response,body) {
+                                },function (error,response,body) {
                                     if (error) {
                                         return msg.reply(`Error returned by Mailgun! Error: ${error}`)
                                     }
                                     else {
                                         return msg.reply('Appeal accepted and user emailed!')
                                     }
-                                }
+                                })
                             }
                         })
                         .catch(e => console.error(e.stack))
