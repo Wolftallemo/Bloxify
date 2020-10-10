@@ -90,7 +90,7 @@ class BlacklistCommand extends Command {
             })
             if (RBXID != undefined) {
               if((banexists.statusCode == 404) || (JSON.parse(banexists.body).usercode != '0x2')) {
-            fs.writeFileSync(`../../data/banfiles/${RBXID}.json`, `{"usercode":"0x1"}`, function (err) {
+            fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`, `{"usercode":"0x1"}`, function (err) {
               if (err) return msg.reply(err)
             })
             const {Storage} = require('@google-cloud/storage')
