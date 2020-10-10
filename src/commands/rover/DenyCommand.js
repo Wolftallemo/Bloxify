@@ -72,7 +72,7 @@ class DenyCommand extends Command {
                                     formData: email
                                 },function (error,response,body) {
                                     if (response.statusCode == 200) {
-                                        return msg.reply('Appeal accepted and user emailed!')
+                                        return msg.reply('Appeal denied and user emailed!')
                                     }
                                     else {
                                         return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
