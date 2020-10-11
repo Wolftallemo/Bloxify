@@ -45,12 +45,14 @@ class AcceptCommand extends Command {
                                 'subject': 'Appeal Accepted',
                                 'html': `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}">discord server</a>.<br/><br/>Note from the moderation team: ${args.note}</html>`
                             }
+                            const mailgunApiKey = Buffer.from(`api:${config.mailgunApiKey}`, 'utf8')
+                            const base64_mailgunApiKey = mailgunApiKey.toString("base64")
                             if (config.mailgunRegion != 'eu') {
                                 request.post({
                                     uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
                                     headers: {
                                         'Content-Type': 'multipart/form-data',
-                                        'Authorization': `Basic ${config.mailgunApiKey}`
+                                        'Authorization': `Basic ${base64_mailgunApiKey}`
                                     },
                                     formData: email
                                 },function (error,response,body) {
