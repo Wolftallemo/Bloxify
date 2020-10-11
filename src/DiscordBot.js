@@ -19,9 +19,6 @@ class DiscordBot {
   constructor () {
     this.initialize()
     this.servers = {}
-    this.authorizedOwners = []
-    this.patronTransfers = {}
-    this.blacklist = {}
   }
 
   /**
@@ -88,37 +85,7 @@ class DiscordBot {
       if (!msg.guild) {
         return
       }
-
-      if (this.blacklist[msg.guild.ownerID]) {
-        msg.reply("This server is blacklisted!")
-        return 'blacklisted'
-      }
     })
-
-    if (this.isPremium()) {
-      this.bot.dispatcher.addInhibitor(msg => {
-        if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
-          if (this.authorizedOwners.length === 0) {
-            msg.reply('Sorry, the authorized users list is still being downloaded. This occurs when the bot has recently restarted. Please wait a few seconds and try again.')
-          } else {
-            msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''}`) // notify sender to donate only if they're an "admin"
-          }
-
-          return 'not_premium'
-        }
-      })
-
-      this.updatePatrons()
-
-      setInterval(() => {
-        const beforePatrons = this.authorizedOwners
-        this.updatePatrons().catch((updateError) => {
-          console.error(`Patron update failed! ${updateError}`)
-
-          this.authorizedOwners = beforePatrons
-        })
-      }, 5 * 60 * 1000)
-    }
 
     // Register commands
     this.bot.registry
@@ -137,69 +104,6 @@ class DiscordBot {
     // Login.
     this.bot.login(process.env.CLIENT_TOKEN)
 
-    this.updateBlacklist().catch(console.error)
-  }
-
-  isPremium () {
-    return !!config.patreonAccessToken
-  }
-
-  async updateBlacklist () {
-    return false
-  }
-
-  async updatePatrons (page, newAuthorizedOwners) {
-    if (!page) {
-      newAuthorizedOwners = []
-    }
-
-    const transferFilePath = path.join(__dirname, './data/transfers.csv')
-
-    if (await fs.exists(transferFilePath)) {
-      const contents = await fs.readFile(transferFilePath, {
-        encoding: 'utf8'
-      })
-
-      this.patronTransfers = contents.split(/\n\r?/)
-        .map(line => line.split(','))
-        .reduce((a, transfer) => {
-          a[transfer[0]] = transfer[1]
-          return a
-        }, {})
-    }
-
-    const url = page || `https://www.patreon.com/api/oauth2/api/campaigns/${config.patreonCampaignId}/pledges?include=patron.null`
-
-    const response = await request(url, {
-      json: true,
-      headers: {
-        Authorization: `Bearer ${config.patreonAccessToken}`
-      }
-    })
-
-    newAuthorizedOwners = [
-      config.owner || '0',
-      ...(config.patreonOverrideOwners || []),
-      ...newAuthorizedOwners,
-      ...(
-        response.data.filter(pledge => (
-          pledge.attributes.declined_since === null
-        )).map(pledge => (
-          response.included.find(include => include.id === pledge.relationships.patron.data.id)
-        )).filter(include => (
-          include.attributes.social_connections &&
-          include.attributes.social_connections.discord
-        )).map(include => (
-          include.attributes.social_connections.discord.user_id
-        ))
-      )
-    ].map(id => this.patronTransfers[id] || id)
-
-    if (response.links && response.links.next) {
-      return this.updatePatrons(response.links.next, newAuthorizedOwners)
-    } else {
-      this.authorizedOwners = newAuthorizedOwners
-    }
   }
 
   /**
