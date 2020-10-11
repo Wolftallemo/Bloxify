@@ -62,7 +62,7 @@ class DiscordServer {
   }
 
   isAuthorized () {
-    return !this.discordBot.isPremium() || this.discordBot.authorizedOwners.includes(this.server.ownerID)
+    return true
   }
 
   /**
