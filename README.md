@@ -39,7 +39,6 @@ Self-hosting is recommended for advanced users only who are experienced with the
    After=network.target
 
    [Service]
-   Environment=NODE_PORT=3001
    Type=simple
    User=root (set this to another user if you're able to!)
    ExecStart=/usr/bin/node [path/to/index.js]
