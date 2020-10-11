@@ -69,7 +69,7 @@ class DenyCommand extends Command {
                                     uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
                                     headers: {
                                         'Content-Type': 'multipart/form-data',
-                                        'Authorization': `Basic ${config.mailgunApiKey}`
+                                        'Authorization': `Basic ${basic_mailgunApiKey}`
                                     },
                                     formData: email
                                 },function (error,response,body) {
