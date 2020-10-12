@@ -35,10 +35,8 @@ class AcceptCommand extends Command {
                 if(msg.member.roles.cache[i] === config.appealsManagerRole[j]) { 
                     return true; 
                 }
-                else {
-                    return false;
-                }
             } 
+            return false;
         } 
     }
     
