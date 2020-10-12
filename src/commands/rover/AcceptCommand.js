@@ -39,6 +39,7 @@ class AcceptCommand extends Command {
                 }
             })
         }
+        check()
     }
     async fn (msg, args) {
         const appealuser = [args.userid]
