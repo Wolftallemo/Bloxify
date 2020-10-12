@@ -28,13 +28,11 @@ class AcceptCommand extends Command {
             ]
         })
     }
-
     hasPermission(msg) {
-        if (!msg.member.roles.cache.filter(role => config.appealsManagerRole.includes(role.id))) {
-            return false
-        }
+        msg.members.roles.cache.filter(role => {
+            return config.appealsManagerRole.includes(role.id)
+        })
     }
-    
     async fn (msg, args) {
         const appealuser = [args.userid]
         const findappeal = `SELECT * FROM appeals WHERE discord_id = $1;`
