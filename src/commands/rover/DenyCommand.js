@@ -28,6 +28,9 @@ class DenyCommand extends Command {
             ]
         })
     }
+    hasPermission(msg) {
+        return msg.member.roles.cache.some(role => config.appealsManagerRole.includes(role.id))
+    }
     async fn (msg, args) {
         const appealuser = [args.userid]
         const findappeal = `SELECT * FROM appeals WHERE discord_id = $1;`
