@@ -29,7 +29,7 @@ class AcceptCommand extends Command {
         })
     }
     hasPermission(msg) {
-        msg.members.roles.cache.filter(role => {
+        msg.member.roles.cache.filter(role => {
             return config.appealsManagerRole.includes(role.id)
         })
     }
