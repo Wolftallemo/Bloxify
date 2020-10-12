@@ -30,6 +30,7 @@ class GetAppealsCommand extends Command {
                     .setTitle('Open Appeals')
                     .setDescription(`${users}`)
                     .setColor(3756250)
+                    .setTimestamp()
                     return msg.embed(embed)
                 }
             })
