@@ -14,13 +14,13 @@ class AcceptCommand extends Command {
             args: [
                 {
                     key: 'userid',
-                    label: 'userid',
+                    label: 'UserID',
                     prompt: 'What is their user ID?',
                     type: 'string'
                 },
                 {
                     key: 'note',
-                    label: 'note',
+                    label: 'Note',
                     prompt: 'Leave a note?',
                     type: 'string',
                     default: 'No further information provided by the moderation team.'
