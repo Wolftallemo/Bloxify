@@ -29,7 +29,7 @@ class AcceptCommand extends Command {
         })
     }
     hasPermission(msg) {
-        return msg.member.roles.cache.some(i => config.appealsManagerRole.includes(i))
+        return msg.member.roles.cache.some(role => config.appealsManagerRole.includes(role.id))
     }
     async fn (msg, args) {
         const appealuser = [args.userid]
