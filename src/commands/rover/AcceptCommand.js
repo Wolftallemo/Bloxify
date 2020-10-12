@@ -30,7 +30,9 @@ class AcceptCommand extends Command {
     }
 
     hasPermission(msg) {
-        return msg.member.roles.cache.filter(role => config.appealsManagerRole.includes(role.id))
+        if (msg.member.roles.cache.filter(role => !config.appealsManagerRole.includes(role.id))) {
+            return false
+        }
     }
     
     async fn (msg, args) {
