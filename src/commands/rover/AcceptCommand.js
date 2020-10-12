@@ -34,7 +34,7 @@ class AcceptCommand extends Command {
     async fn (msg, args) {
         const appealuser = [args.userid]
         const findappeal = `SELECT * FROM appeals WHERE discord_id = $1;`
-        if ((config.appealsManagerRole != null) && (config.mailgunApiKey != null) && (config.mailgunDomain != null) && (config.fromAddress != null)){
+        if ((config.appealsManagerRole) && (config.mailgunApiKey) && (config.mailgunDomain) && (config.fromAddress)){
             client.query(findappeal,appealuser)
             .then(foundinfo => {
                 if(foundinfo.rows[0] != null) {
