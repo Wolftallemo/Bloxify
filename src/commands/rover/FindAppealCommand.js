@@ -31,7 +31,7 @@ class FindAppealCommand extends Command {
         .then(found => {
             if (found.rows[0] != null) {
                 const embed = new Discord.MessageEmbed()
-                .setTitle(`Appeal for ${found.rows[0].username}#${('0000'+found.rows[0].discriminator).slice(-4)} (${list.rows[0].discord_id})`)
+                .setTitle(`Appeal for ${found.rows[0].username}#${('0000'+found.rows[0].discriminator).slice(-4)} (${found.rows[0].discord_id})`)
                 .addFields(
                     {name: 'Reason for ban', value: `${found.rows[0].reason}`},
                     {name: 'Comment', value: `${found.rows[0].comment}`},
