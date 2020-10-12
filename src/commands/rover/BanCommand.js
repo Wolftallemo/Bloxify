@@ -28,19 +28,20 @@ class BanCommand extends Command {
     ]}
   )
 }
-
+  hasPermission(msg) {
+    return config.gameModeratorUsers.includes(msg.author.id) || msg.members.roles.cache.some(role => config.gameModeratorRole.includes(role.id))
+  }
   async fn (msg, args) {
     const rbxuser = args.rbxuser
     const reason = args.reason
-    if(config.gameModeratorRole != null) {
-      if ((msg.member.roles.cache.forEach(role => config.gameModeratorRole.includes(role.id)))) {
-        let RBXID = 'Unknown'
-        let RBXUSER = 'Unknown'
-        try {
-          const response = await request({
-            uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
-            simple: false,
-            resolveWithFullResponse: true
+    if ((config.gameModeratorRole) || (config.gameModeratorUsers)) {
+      let RBXID = 'Unknown'
+      let RBXUSER = 'Unknown'
+      try {
+        const response = await request({
+          uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
+          simple: false,
+          resolveWithFullResponse: true
         })
         RBXID = JSON.parse(response.body).Id
         RBXUSER = JSON.parse(response.body).Username
@@ -55,61 +56,19 @@ class BanCommand extends Command {
       const storage = new Storage({keyFilename: config.serviceKeyPath})
       async function uploadFile() {
           await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
-     }
-     uploadFile()
-     uploadFile().catch(e => {
-       return msg.reply(e.response.statusMessage)
-     })
-     return msg.reply(`${RBXUSER} successfully banned!`)
-    }
-     else {
-       return msg.reply('This user does not exist!')
-     }
       }
-      else {
-        return msg.reply('You cannot run this command!')
-      }
-    }
-    else if(config.gameModeratorUsers != null){
-      if ((config.gameModeratorUsers.includes(msg.author.id)) && (config.gameModeratorRole == null)) {
-        let RBXID = 'Unknown'
-        let RBXUSER = 'Unknown'
-        try {
-          const response = await request({
-            uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
-            simple: false,
-            resolveWithFullResponse: true
-        })
-        RBXID = JSON.parse(response.body).Id
-        RBXUSER = JSON.parse(response.body).Username
-      }
-      catch (e) {
-        return msg.reply(`An error occured! ${e}`)
-      }
-      if (RBXID != undefined) {
-      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`, `{"usercode":"0x2","reason":"${reason}"}`, function (err) {
-        if (err) return msg.reply(err)
+      uploadFile()
+      uploadFile().catch(e => {
+        return msg.reply(e.response.statusMessage)
       })
-      const storage = new Storage({keyFilename: config.serviceKeyPath})
-      async function uploadFile() {
-          await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
-     }
-     uploadFile()
-     uploadFile().catch(e => {
-       return msg.reply(e.response.statusMessage)
-     })
-     return msg.reply(`${RBXUSER} successfully banned!`)
-    }
-     else {
-       return msg.reply('This user does not exist!')
-     }
+      return msg.reply(`${RBXUSER} successfully banned!`)
       }
       else {
-        return msg.reply('You cannot run this command!')
+        return msg.reply('This user does not exist!')
       }
     }
    else {
-      return msg.reply('Roles/users were not provided!')
+      return msg.reply('You do not have your game moderator roles/users added!')
     }
   }
 }
