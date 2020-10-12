@@ -45,7 +45,7 @@ class AcceptCommand extends Command {
                             'from': config.fromAddress,
                             'to': foundemail.rows[0].email,
                             'subject': 'Appeal Accepted',
-                            'html': `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}">discord server</a>.<br/><br/>Note from the moderation team: ${args.note}</html>`
+                            'html': `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}" target="_blank">discord server</a>.<br/><br/>Note from the moderation team: ${args.note}</html>`
                         }
                         const mailgunApiKey = Buffer.from(`api:${config.mailgunApiKey}`, 'utf8')
                         const base64_mailgunApiKey = mailgunApiKey.toString("base64")
