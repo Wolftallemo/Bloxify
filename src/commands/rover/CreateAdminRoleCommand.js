@@ -28,5 +28,6 @@ class CreateAdminRoleCommand extends Command {
         const adminRoles = this.server.getSetting('adminRoles')
         adminRoles.push(args.role.id)
         this.server.setSetting('adminRoles', adminRoles)
+        return msg.reply(`${args.role.name} added as an admin role!`)
     }
 }
