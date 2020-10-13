@@ -28,7 +28,7 @@ class HttpduckCommand extends Command {
         uri: 'https://random-d.uk/api/list',
         simple: false
       })
-      const regex = `/(${args.httpstatus})/g`
+      const regex = `/(${args.httpstatus})/`
       const code = JSON.parse(response).http.toString().match(args.httpstatus)
       if (code) {
         const embed = new Discord.MessageEmbed()
