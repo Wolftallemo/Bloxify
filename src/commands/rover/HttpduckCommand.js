@@ -30,7 +30,7 @@ class HttpduckCommand extends Command {
       })
       const regex = `/(${args.httpstatus})/g`
       const code = JSON.parse(response).http.toString().match(args.httpstatus)
-      if (code.match(regex)) {
+      if (code) {
         const embed = new Discord.MessageEmbed()
         .setFooter('Powered by random-d.uk')
         .setImage(`https://random-d.uk/api/http/${code}`)
