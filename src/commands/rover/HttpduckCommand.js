@@ -24,15 +24,27 @@ class HttpduckCommand extends Command {
 
   async fn (msg, args) {
     const code = args.httpstatus
-    const validcodes = ['400','451','302','301','413','404','403','418','420','426','429','200','500','100','409']
-    if (validcodes.includes(`${code}`)) {
-    const embed = new Discord.MessageEmbed()
-    .setFooter('Powered by random-d.uk')
-    .setImage(`https://random-d.uk/api/http/${code}`)
-    return msg.embed(embed)
+    let returnedcodes = undefined
+    try {
+      const response = await request({
+        uri: 'https://random-d.uk/api/list',
+        simple: false
+      })
+      returnedcodes = JSON.parse(response).http
+      const regex = `/(${args.httpstatus})/`
+      match = response.match(regex)
+      if (match) {
+        const embed = new Discord.MessageEmbed()
+        .setFooter('Powered by random-d.uk')
+        .setImage(`https://random-d.uk/api/http/${match}`)
+        return msg.embed(embed)
+      }
+      else {
+        return msg.reply('We do not have a duck with that status code yet!')
+      }
     }
-    else {
-      return msg.reply('We do not have a duck with that status code yet.')
+    catch(e) {
+      return msg.reply(`An error occured! ${e}`)
     }
   }
 }
