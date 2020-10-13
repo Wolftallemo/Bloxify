@@ -7,6 +7,6 @@ const client = new Client({
     password: dbconfig.databasePassword,
     port: 5432,
 })
-client.connect()
+if ((dbconfig.databaseUser)(dbconfig.databaseAddress)(dbconfig.databaseName)(dbconfig.databasePassword)) client.connect()
 
 module.exports = client
