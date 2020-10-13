@@ -25,6 +25,8 @@ class CreateAdminRoleCommand extends Command {
         if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
         if (args.role.name === '@everyone' || args.role.name === '@here') return msg.reply('You are unable to bind this role.')
         if (this.server.getSetting('adminRoles').includes(args.role.id)) return msg.reply('This role is already designated as an admin role.')
-        this.server.setSetting('adminRoles', args.role.id)
+        const adminRoles = this.server.getSetting('adminRoles')
+        adminRoles.push(args.role.id)
+        this.server.setSetting('adminRoles', adminRoles)
     }
 }
