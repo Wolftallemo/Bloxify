@@ -23,20 +23,17 @@ class HttpduckCommand extends Command {
   }
 
   async fn (msg, args) {
-    let codesarray = 'unknown'
     try {
       const response = await request({
         uri: 'https://random-d.uk/api/list',
         simple: false
       })
-      console.log(JSON.parse(response).http.toString())
-      codesarray = JSON.parse(response).http
-      codes = codesarray.toString()
-      const regex = `/(${args.httpstatus}.)\w*/`
-      if (codes.match(regex)) {
+      const regex = `/(${args.httpstatus})/g`
+      const code = JSON.parse(response).http.toString().match(args.httpstatus)
+      if (code.match(regex)) {
         const embed = new Discord.MessageEmbed()
         .setFooter('Powered by random-d.uk')
-        .setImage(`https://random-d.uk/api/http/${args.httpstatus}`)
+        .setImage(`https://random-d.uk/api/http/${code}`)
         return msg.embed(embed)
       }
       else {
