@@ -162,12 +162,6 @@ class DiscordMember {
       cache: false
     })
 
-    // Fetch newest data? Please?
-    this.member = await this.server.members.fetch({
-      user: this.user,
-      cache: false
-    })
-
     // If options.message is provided, we reply to that message with a status update
     // and edit it with new info throughout the verification. It's also called upon
     // this function returning output, so we need a default state for it to be a
@@ -231,7 +225,7 @@ class DiscordMember {
     if (this.user.bot) {
       return status({
         status: false,
-        error: ':robot: RoVer cannot verify bots.'
+        error: ':robot: Virgil cannot verify bots.'
       })
     }
 
@@ -239,7 +233,7 @@ class DiscordMember {
     if (this.member.roles.cache.find(role => role.name === 'RoVer Bypass')) {
       return status({
         status: false,
-        error: ':octagonal_sign: RoVer cannot act on users with the "RoVer Bypass" role.',
+        error: ':octagonal_sign: Virgil cannot act on users with the "RoVer Bypass" role.',
         nonFatal: true
       })
     }
@@ -251,7 +245,7 @@ class DiscordMember {
     if (!this.member.manageable || !botMember.hasPermission('MANAGE_ROLES')) {
       return status({
         status: false,
-        error: this.member.guild.ownerID === this.member.id ? '\n\nYou are the server owner. RoVer cannot make changes to you. This is a Discord restriction. If you want, you can change your own nickname.' : "\n\nRoVer's can't manage this user. Please have a server admin drag RoVer's role above all other roles and ensure RoVer has permission to modify roles in order to fix this problem.",
+        error: this.member.guild.ownerID === this.member.id ? '\n\nYou are the server owner. Virgil cannot make changes to you. This is a Discord restriction. If you want, you can change your own nickname.' : "\n\nVirgil can't manage this user. Please have a server admin drag Virgil's role above all other roles and ensure Virgil has permission to modify roles in order to fix this problem.",
         nonFatal: true
       })
     }
@@ -417,7 +411,7 @@ class DiscordMember {
           return status({
             status: false,
             nonFatal: true,
-            error: "Something went wrong when checking group membership. It appears the Roblox group API is offline or returning malformed data. It's possible Roblox is down for maintenance or there is something else wrong with Roblox. Please try again later. If this problem is unique or is lasting longer than is expected, please join our support server by saying `!support`."
+            error: "Something went wrong when checking group membership. It appears the Roblox group API is offline or returning malformed data. It's possible Roblox is down for maintenance or there is something else wrong with Roblox. Please try again later. If this problem is unique or is lasting longer than is expected, find contact information by saying `!support`."
           })
         }
       }
