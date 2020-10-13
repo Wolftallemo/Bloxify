@@ -7,7 +7,7 @@ class CreateGroupRanksCommand extends Command {
     super(client, {
       name: 'creategroupranks',
       properName: 'CreateGroupRanks',
-      aliases: ['rovercreategroupranks'],
+      aliases: ['virgilcreategroupranks'],
       description: 'Creates Discord roles from all of the roles in a given group, and then binds them to the group.',
 
       args: [
@@ -23,7 +23,7 @@ class CreateGroupRanksCommand extends Command {
 
   async fn (msg, args) {
     if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
-      return msg.reply("RoVer needs the 'Manage Roles' permission in order to do this.")
+      return msg.reply("Virgil needs the 'Manage Roles' permission in order to do this.")
     }
 
     if (this.server.ongoingSettingsUpdate) return msg.reply('Server settings are currently being saved - please try again in a few moments.')
@@ -55,7 +55,7 @@ class CreateGroupRanksCommand extends Command {
 
       msg.reply(`Created ${Roles.length} role bindings successfully (and created the roles if necessary).`)
     } catch (e) {
-      msg.reply(':no_entry_sign: Something went wrong. Maybe the group doesn\'t exist, or maybe RoVer doesn\'t have permission to create roles in this server.')
+      msg.reply(':no_entry_sign: Something went wrong. Maybe the group doesn\'t exist, or maybe Virgil doesn\'t have permission to create roles in this server.')
     }
   }
 }
