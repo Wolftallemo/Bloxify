@@ -24,7 +24,6 @@ class HttpduckCommand extends Command {
 
   async fn (msg, args) {
     let codesarray = 'unknown'
-    let match = false
     try {
       const response = await request({
         uri: 'https://random-d.uk/api/list',
@@ -37,7 +36,7 @@ class HttpduckCommand extends Command {
       if (codes.match(regex)) {
         const embed = new Discord.MessageEmbed()
         .setFooter('Powered by random-d.uk')
-        .setImage(`https://random-d.uk/api/http/${codematch}`)
+        .setImage(`https://random-d.uk/api/http/${args.httpstatus}`)
         return msg.embed(embed)
       }
       else {
