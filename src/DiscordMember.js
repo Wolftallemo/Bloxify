@@ -432,6 +432,173 @@ class DiscordMember {
         case 404: {
           // User isn't in the database.
           // Add the "Not Verified" role to the user.
+          // Check bloxlink before adding the "Not Verified" role
+          status(':bulb: Checking bloxlink registry...')
+          try {
+            bloxlinkdata = await request({
+              uri: `https://api.blox.link/v1/user/${this.id}`,
+              json: true,
+              simple: false
+            })
+          }
+          catch (e) {
+            if (config.loud) console.log(e)
+            return status({
+              status: false,
+              nonFatal: true,
+              error: "There was an error when fetching data from bloxlink!" + errorAppend
+            })
+          }
+          if (bloxlinkdata.status === 'ok') {
+            status(':newspaper: Getting latest profile information...')
+            // Resolve the Roblox username from the user id.
+            let apiUserData = {}
+            try {
+              apiUserData = await request({
+                uri: `http://api.roblox.com/users/${bloxlinkdata.primaryAccount}`,
+                json: true,
+                simple: false
+              })
+            } catch (e) {
+              if (config.loud) console.log(e)
+              return status({
+                status: false,
+                error: 'There was an error while fetching the user\'s data!'
+              })
+            }
+      
+              if (apiUserData.errors && apiUserData.errors[0] && apiUserData.errors[0].code === 0) {
+                return status({
+                  status: false,
+                  error: 'Roblox is currently undergoing maintenance. Please try again later.'
+                })
+              }
+      
+              if (apiUserData.Username) {
+                data.robloxUsername = apiUserData.Username
+              }
+              if (apiUserData.Id) {
+                data.robloxId = apiUserData.Id
+              }
+      
+            // Check if these settings are enabled for this specific server,
+            // if so, then put the member in the correct state.
+      
+            status(':dividers:️ Updating your nickname and roles...')
+      
+            if (this.discordServer.getSetting('verifiedRole')) {
+              const role = this.discordServer.getSetting('verifiedRole')
+              if (!this.member.roles.cache.has(role) && this.server.roles.cache.has(role) && this.discordServer.canManageRole(role)) {
+                try {
+                  await this.member.roles.add(role)
+                } catch (e) {
+                  if (config.loud) console.log(e)
+                  return status({
+                    status: false,
+                    nonFatal: true,
+                    error: "There was an error while trying to assign the verified role! Ensure RoVer's role is above it." + errorAppend
+                  })
+                }
+              }
+            }
+      
+            if (this.discordServer.getSetting('verifiedRemovedRole')) {
+              const role = this.discordServer.getSetting('verifiedRemovedRole')
+              if (this.member.roles.cache.has(role) && this.server.roles.cache.has(role) && this.discordServer.canManageRole(role)) {
+                try {
+                  await this.member.roles.remove(role)
+                } catch (e) {
+                  if (config.loud) console.log(e)
+                  return status({
+                    status: false,
+                    nonFatal: true,
+                    error: "There was an error while trying to remove the verified role! Ensure RoVer's role is above it." + errorAppend
+                  })
+                }
+              }
+            }
+      
+            if (
+              this.discordServer.getSetting('nicknameUsers') &&
+              !this.member.roles.cache.find(role => role.name === 'RoVer Nickname Bypass') &&
+              botMember.hasPermission('MANAGE_NICKNAMES')
+            ) {
+              const nickname = (await this.getNickname(data)).substring(0, 32)
+      
+              this.discordServer.nicknames.set(this.id, nickname)
+      
+              if (this.member.displayName !== nickname) {
+                try {
+                  await this.member.setNickname(nickname)
+                } catch (e) {
+                  if (config.loud) console.log(e)
+                  return status({
+                    status: false,
+                    nonFatal: true,
+                    error: this.member.guild.ownerID === this.member.id ? "Sorry, Discord doesn't allow bots to change the server owner's nickname. Please manually update your nickname. Or don't, I'm just an error message." : "RoVer doesn't have permission to change that user's nickname." + errorAppend
+                  })
+                }
+              }
+            }
+      
+            if (options.announce !== false) {
+              this.discordServer.announce('User Verified', `<@${this.id}> verified as [${data.robloxUsername}](https://www.roblox.com/users/${data.robloxId}/profile)`)
+            }
+      
+            // Check if we want to resolve group rank bindings with cached or fresh data.
+            if (options.clearBindingsCache !== false) {
+              await Cache.clear(`bindings.${data.robloxId}`)
+            }
+      
+            // Resolve group rank bindings for this member.
+            if (this.discordServer.getSetting('groupRankBindings').length > 0) {
+              status(':mag_right: Checking group ranks...')
+      
+              await DiscordServer.getRobloxMemberGroups(data.robloxId)
+      
+              const promises = []
+              for (const binding of this.discordServer.getSetting('groupRankBindings')) {
+                // We use a Promise.then here so that they all execute asynchronously.
+                promises.push(DiscordServer.resolveGroupRankBinding(binding, data.robloxId, data.robloxUsername)
+                  .then((state) => {
+                    const hasRole = this.member.roles.cache.get(binding.role) != null
+                    if (hasRole === state) return
+      
+                    if (!this.server.roles.cache.has(binding.role)) return
+      
+                    if (!this.discordServer.canManageRole(binding.role)) return
+      
+                    if (state === true) {
+                      this.member.roles.add(binding.role).catch(e => {})
+                    } else {
+                      this.member.roles.remove(binding.role).catch(e => {})
+                    }
+                  })
+                )
+              }
+      
+              try {
+                await Promise.all(promises)
+              } catch (e) {
+                return status({
+                  status: false,
+                  nonFatal: true,
+                  error: "Something went wrong when checking group membership. It appears the Roblox group API is offline or returning malformed data. It's possible Roblox is down for maintenance or there is something else wrong with Roblox. Please try again later. If this problem is unique or is lasting longer than is expected, find contact information by saying `!support`."
+                })
+              }
+            }
+      
+            // Clear verification attempt history
+            VerificationAttempts.delete(this.id)
+      
+            return status({
+              status: true,
+              robloxUsername: data.robloxUsername,
+              robloxId: data.robloxId,
+              discordId: this.member.id,
+              discordName: this.member.user.username
+            })
+          }
 
           if (this.discordServer.getSetting('verifiedRemovedRole')) {
             try {
@@ -442,6 +609,7 @@ class DiscordMember {
             } catch (e) {}
           }
 
+          else {
           let error = `:wave: You must be new! Please go to ${Util.getVerifyLink(this.discordServer.server)} and follow the instructions on the page in order to get verified.`
 
           // Only trigger verification help message if this is a manually-invoked verification
@@ -468,7 +636,7 @@ class DiscordMember {
             status: false,
             error
           })
-        } case 429:
+        }} case 429:
           // This client has exceeded the amount of requests allowed in a 60 second period.
           return status({
             status: false,
