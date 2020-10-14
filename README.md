@@ -54,7 +54,8 @@ Self-hosting is recommended for advanced users only who are experienced with the
    If you installed node using `snap`, the path of the node executable is `/snap/bin/node`
 
 7. Save the file (presumably with the name you made for it in step two if you named it).
-8. Reload the systemd daemon: `sudo systemctl daemon-reload`
+8. Enable the service: `sudo systemctl enable virgil`
+9. Reload the systemd daemon: `sudo systemctl daemon-reload`
    If the bot is not online and/or errors occur when running commands, check the logs with `sudo journalctl -eu [name of service]`
 
 ### Update Server
