@@ -434,6 +434,7 @@ class DiscordMember {
           // Add the "Not Verified" role to the user.
           // Check bloxlink before adding the "Not Verified" role
           status(':bulb: Checking bloxlink registry...')
+          let bloxlinkdata = ''
           try {
             bloxlinkdata = await request({
               uri: `https://api.blox.link/v1/user/${this.id}`,
@@ -445,7 +446,6 @@ class DiscordMember {
             if (config.loud) console.log(e)
             return status({
               status: false,
-              nonFatal: true,
               error: "There was an error when fetching data from bloxlink!" + errorAppend
             })
           }
