@@ -21,37 +21,41 @@
 Self-hosting is recommended for advanced users only who are experienced with the Node.js ecosystem. Note that setup or code support will not be given for attempting to run your own instance of RoVer, modified or otherwise.
 
 1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on.
-2. **Node.js version 8.9.4 LTS or newer is recommended to run RoVer.**
+2. **Node.js version 8.9.4 LTS or newer is recommended to run Virgil.**
 3. Use NPM to install the dependencies from the project folder: `npm i`
-4. Edit the file `src/data/client.json` and insert your [bot token](https://discordapp.com/developers/applications/me).
+4. Edit the file `src/data/client.json` and insert your [bot token](https://discord.com/developers/applications/me).
 5. Start the bot from the project folder: `node ./src/index.js`
 6. You should set up a process manager like [PM2](http://pm2.keymetrics.io/) or forever.js to ensure that the bot remains online, or a systemd service if you're self-hosting on a systemd compatible linux distro.
 
-### Creating a systemd service (Systemd-compatible Linux distros only)
+### Creating a systemd service (This assumes your distro ships with systemd)
 
-1. Navigate to `/etc/systemd/system`
-2. Make a new file with `nano` or `vim` with `.service` as the extension.
-3. Now to create the service. You can customize it as you see fit, a sample service is below.
+1. Create a system user for the systemd service: `sudo adduser --system --no-create-home --disabled-login --group virgil`
+2. Add the system user as a group to the files: `sudo chown -R yourusername:virgil *`
+3. Give the group write permissions to the files: `sudo chmod -R +w yourusername *`
+4. Navigate to `/etc/systemd/system`
+5. Make a new file using your favorite text editor with `.service` as the extension.
+6. Now to create the service. You can customize it as you see fit, a sample service is below.
    ```
    [Unit]
-   Description=Virgil autostart on boot
-   Documentation=https://github.com/evaera/RoVer/wiki
+   Description=Virgil service
+   Documentation=https://github.com/Wolftallemo/Virgil/blob/master/README.md
    After=network.target
 
    [Service]
    Type=simple
-   User=root (set this to another user if you're able to!)
-   ExecStart=/usr/bin/node [path/to/index.js]
+   User=virgil
+   ExecStart=/usr/bin/node /full/path/to/index.js
    Restart=on-failure
 
    [Install]
    WantedBy=multi-user.target
    ```
 
-4. Save the file (presumably with the name you made for it in step two if you named it).
-5. Enable the service: `sudo systemctl enable [name of service]`
-6. Start the service: `sudo systemctl start [name of service]`
-6b. If the bot is not online, check the logs with `sudo journalctl -eu [name of service]`
+   If you installed node using `snap`, the path of the node executable is `/snap/bin/node`
+
+7. Save the file (presumably with the name you made for it in step two if you named it).
+8. Reload the systemd daemon: `sudo systemctl daemon-reload`
+   If the bot is not online and/or errors occur when running commands, check the logs with `sudo journalctl -eu [name of service]`
 
 ### Update Server
 
