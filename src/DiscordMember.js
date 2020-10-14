@@ -434,7 +434,7 @@ class DiscordMember {
                   let bloxlinkdata = ''
                   try {
                     bloxlinkdata = await request({
-                      uri: `https://api.blox.link/v1/user/${this.id}`,
+                      uri: `https://api.blox.link/v1/user/${this.member.id}`,
                       json: true,
                       simple: false
                     })
