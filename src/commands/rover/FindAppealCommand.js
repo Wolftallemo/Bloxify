@@ -30,20 +30,14 @@ class FindAppealCommand extends Command {
         client.query(query,val)
         .then(found => {
             if (found.rows[0]) {
-                function checkReason () {
-                    if (!found.rows[0].reason) {
-                        return reason = "No reason provided"
-                    }
+                let reason = "No reason provided"
+                let comment = "No comment provided"
+                if (found.rows[0].reason) {
                     return reason = found.rows[0].reason
                 }
-                const reason = checkReason()
-                function checkComment () {
-                    if (!found.rows[0].comment) {
-                        return comment = "No comment provided"
-                    }
+                if (found.rows[0].comment) {
                     return comment = found.rows[0].comment
                 }
-                const comment = checkComment()
                 const embed = new Discord.MessageEmbed()
                 .setTitle(`Appeal for ${found.rows[0].username}#${('0000'+found.rows[0].discriminator).slice(-4)} (${found.rows[0].discord_id})`)
                 .addFields(
