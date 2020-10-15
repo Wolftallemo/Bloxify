@@ -29,12 +29,26 @@ class FindAppealCommand extends Command {
         const val = [args.userid]
         client.query(query,val)
         .then(found => {
-            if (found.rows[0] != null) {
+            if (found.rows[0]) {
+                function checkReason () {
+                    if (!found.rows[0].reason) {
+                        return reason = "No reason provided"
+                    }
+                    return reason = found.rows[0].reason
+                }
+                const reason = checkReason()
+                function checkComment () {
+                    if (!found.rows[0].comment) {
+                        return comment = "No comment provided"
+                    }
+                    return comment = found.rows[0].comment
+                }
+                const comment = checkComment()
                 const embed = new Discord.MessageEmbed()
                 .setTitle(`Appeal for ${found.rows[0].username}#${('0000'+found.rows[0].discriminator).slice(-4)} (${found.rows[0].discord_id})`)
                 .addFields(
-                    {name: 'Reason for ban', value: `${found.rows[0].reason}`},
-                    {name: 'Comment', value: `${found.rows[0].comment}`},
+                    {name: 'Reason for ban', value: `${reason}`},
+                    {name: 'Comment', value: `${comment}`},
                     {name: 'Time', value:`${found.rows[0].date}`}
                 )
                 .setColor(3756250)
