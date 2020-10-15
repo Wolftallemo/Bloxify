@@ -33,10 +33,10 @@ class FindAppealCommand extends Command {
                 let reason = "No reason provided"
                 let comment = "No comment provided"
                 if (found.rows[0].reason) {
-                    return reason = found.rows[0].reason
+                    reason = found.rows[0].reason
                 }
                 if (found.rows[0].comment) {
-                    return comment = found.rows[0].comment
+                    comment = found.rows[0].comment
                 }
                 const embed = new Discord.MessageEmbed()
                 .setTitle(`Appeal for ${found.rows[0].username}#${('0000'+found.rows[0].discriminator).slice(-4)} (${found.rows[0].discord_id})`)
