@@ -52,7 +52,7 @@ class UpdateCommand extends Command {
   }
 
   hasPermission (msg) {
-    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.cache.find(role => role.name === 'RoVer Admin') || msg.member.roles.cache.find(role => role.name === 'RoVer Updater')
+    return this.client.isOwner(msg.author) || msg.member.hasPermission(this.userPermissions) || msg.member.roles.cache.find(role => role.name === 'RoVer Admin') || msg.member.roles.cache.find(role => role.name === 'RoVer Updater') || msg.member.roles.cache.some(role => config.updateManagerRoles.includes(role.id))
   }
 
   async fn (msg, args) {
