@@ -33,6 +33,7 @@ class AppealBanCommand extends Command {
                     console.error(e)
                     return msg.reply(`An error occured! ${e}`)
                 })
+                return msg.reply('User has been banned from the form!')
             }
         })
         .catch(e => {
