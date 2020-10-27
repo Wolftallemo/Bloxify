@@ -155,7 +155,7 @@ class DiscordMember {
       // We only want to clear on manually-invoked verifications.
       await DiscordServer.clearMemberCache(this.id)
     }
-    
+
     // Fetch newest data? Please?
     this.member = await this.server.members.fetch({
       user: this.user,
@@ -170,7 +170,7 @@ class DiscordMember {
 
     if (options.message) {
       // Create the status message and save initial information.
-      const statusMessage = await options.message.reply(':bulb: Working...')
+      const statusMessage = await options.message.reply(':thought_balloon: Checking permissions...')
 
       // We don't want to edit the message too quickly, otherwise Discord will throttle us. T
       // This limits edits to one per second but keeps it up to date after at least 1 second passes.
@@ -238,8 +238,6 @@ class DiscordMember {
       })
     }
 
-    await this.server.members.fetch(this.bot.id)
-
     const botMember = this.server.me
 
     if (!this.member.manageable || !botMember.hasPermission('MANAGE_ROLES')) {
@@ -251,6 +249,7 @@ class DiscordMember {
     }
 
     status(':scroll: Checking the verification registry...')
+
     try {
       // Read user data from memory, or request it if there isn't any cached.
       data = await Cache.get('users', this.id)
@@ -408,6 +407,7 @@ class DiscordMember {
         try {
           await Promise.all(promises)
         } catch (e) {
+          console.log(e)
           return status({
             status: false,
             nonFatal: true,
