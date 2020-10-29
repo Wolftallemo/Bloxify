@@ -17,10 +17,10 @@
     "uws": "^200.0.0",
     "zlib-sync": "^0.1.7"
   },
-  "name": "virgil",
+  "name": "bloxify",
   "version": "1.0.0",
   "main": "src/index.js",
-  "repository": "https://github.com/Wolftallemo/Virgil",
+  "repository": "https://github.com/Wolftallemo/Bloxify",
   "author": "Wolftallemo",
   "license": "Apache-2.0",
   "scripts": {
