@@ -63,7 +63,7 @@ class ReportCommand extends Command {
       ]
     }
     /* Make sure it's a real url */
-    if ((RBXID != undefined) && (evidence.match('^(https:\/\/|http:\/\/|<https:\/\/|<http:\/\/.)\S*'))) {
+    if ((RBXID) && (evidence.match('^(https:\/\/|http:\/\/|<https:\/\/|<http:\/\/.)\S*'))) {
     const discordSend =  await request({uri: config.reportWebhookURL, method:'POST', json: true, body: embed})
     return msg.reply('Report sent!')
     }
