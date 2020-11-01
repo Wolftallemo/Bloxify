@@ -84,16 +84,25 @@ class AcceptCommand extends Command {
                             })
                         }
                     })
-                    .catch(e => console.error(e.stack))
+                    .catch(e => {
+                        console.error(e.stack)
+                        return msg.reply(`I could not retrieve the data! ${e}`)
+                    })
                     const markasresolved = 'DELETE FROM appeals WHERE discord_id = $1;'
                     client.query(markasresolved,appealuser)
-                    .catch(e => console.error(e.stack))
+                    .catch(e => {
+                        console.error(e.stack)
+                        return msg.reply(`I could not resolve this appeal!`)
+                    })
                 }
                 else {
                     return msg.reply('There are no unresolved appeals under this user account!')
                 }
             })
-            .catch(e => console.error(e.stack))
+            .catch(e => {
+                console.error(e.stack)
+                return msg.reply(`I could not retrieve the data! ${e}`)
+            })
         }
         else {
             return msg.reply('Make sure your appeal manager roles and mailgun information are set!')

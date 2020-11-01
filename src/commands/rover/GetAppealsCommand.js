@@ -36,6 +36,9 @@ class GetAppealsCommand extends Command {
                 return msg.embed(embed)
             }
         })
-        .catch(e => console.error(e.stack))
+        .catch(e => {
+            console.error(e.stack)
+            return msg.reply(`I could not retrieve the data! ${e}`)
+        })
     }
 }

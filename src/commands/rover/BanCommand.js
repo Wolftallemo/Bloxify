@@ -59,6 +59,7 @@ class BanCommand extends Command {
       }
       uploadFile()
       uploadFile().catch(e => {
+        console.error(e)
         return msg.reply(e.response.statusMessage)
       })
       return msg.reply(`${RBXUSER} successfully banned!`)

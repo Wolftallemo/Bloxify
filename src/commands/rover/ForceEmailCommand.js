@@ -84,7 +84,10 @@ class ForceEmailCommand extends Command {
                     return msg.reply('We do not have an email address for this user!')
                 }
             })
-            .catch(e => console.error(e.stack))
+            .catch(e => {
+                console.error(e.stack)
+                return msg.reply(`Something br0ke! ${e}`)
+            })
         }
         else {
             return msg.reply('Mailgun settings and/or appeals manager roles are missing!')
