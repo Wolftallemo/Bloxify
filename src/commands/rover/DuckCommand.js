@@ -1,7 +1,6 @@
 const Command = require('../Command')
 const Discord = require('discord.js')
 const request = require('request-promise')
-const { RichEmbed } = require('discord.js')
 
 module.exports =
 class DuckCommand extends Command {
