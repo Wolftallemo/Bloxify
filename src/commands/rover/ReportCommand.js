@@ -35,11 +35,12 @@ class ReportCommand extends Command {
   }
 
   async fn (msg, args) {
-    const rbxuser = args.rbxuser
+    let rbxuser = args.rbxuser
     const evidence = args.evidence
     const description = args.description
     let RBXID = 'Unknown'
     let RBXUSER = 'Unknown'
+    if (args[0].match(/(<|>)/g)) rbxuser = args[0].replace(/(<|>)/g,'')
     try {
       const response = await request({
         uri: `https://api.roblox.com/users/get-by-username?username=${rbxuser}`,
