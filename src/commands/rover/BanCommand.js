@@ -49,32 +49,31 @@ class BanCommand extends Command {
       catch (e) {
         return msg.reply(`An error occured! ${e}`)
       }
-      if (RBXID != undefined) {
-      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`, `{"usercode":"0x2","reason":"${reason}"}`, function (err) {
-        if (err) return msg.reply(err)
+      if (!RBXID) return msg.reply('Either this user was terminated or Roblox is having problems!')
+      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`,'{"usercode":"0x1"}',function (err) {
+        if (err) {
+          console.error(err)
+          return msg.reply(err)
+        }
       })
       const storage = new Storage({keyFilename: config.serviceKeyPath})
-      async function uploadFile() {
-          await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
+      try {
+        await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`).catch(e => {
+          console.error(e)
+          return msg.reply(e)
+        })
+        await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
+          console.error(e)
+          return msg.reply(e)
+        })
       }
-      uploadFile().catch(e => {
-        console.error(e)
-        return msg.reply(e.response.statusMessage)
-      })
-      async function makePublic() {
-        await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic()
-      }
-      makePublic().catch(e => {
+      catch (e) {
         console.error(e)
         return msg.reply(e)
-      })
-      return msg.reply(`${RBXUSER} successfully banned!`)
       }
-      else {
-        return msg.reply('This user does not exist!')
-      }
+      return msg.reply(`${RBXUSER} successfully blacklisted!`)
     }
-   else {
+    else {
       return msg.reply('You do not have your game moderator roles/users added!')
     }
   }
