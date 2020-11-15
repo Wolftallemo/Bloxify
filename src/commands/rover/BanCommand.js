@@ -34,7 +34,7 @@ class BanCommand extends Command {
   async fn (msg, args) {
     const rbxuser = args.rbxuser
     let reason = args.reason
-    if reason.match(/(["])/g) reason = reason.replace(/(["])/g,'\"')
+    if (reason.match(/(["])/g)) reason = reason.replace(/(["])/g,'\"')
     if ((config.gameModeratorRole) || (config.gameModeratorUsers)) {
       let RBXID = 'Unknown'
       let RBXUSER = 'Unknown'
