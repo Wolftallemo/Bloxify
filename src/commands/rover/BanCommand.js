@@ -33,7 +33,8 @@ class BanCommand extends Command {
   }
   async fn (msg, args) {
     const rbxuser = args.rbxuser
-    const reason = args.reason
+    let reason = args.reason
+    if reason.match(/(["])/g) reason = reason.replace(/(["])/g,'\"')
     if ((config.gameModeratorRole) || (config.gameModeratorUsers)) {
       let RBXID = 'Unknown'
       let RBXUSER = 'Unknown'
@@ -50,7 +51,7 @@ class BanCommand extends Command {
         return msg.reply(`An error occured! ${e}`)
       }
       if (!RBXID) return msg.reply('Either this user was terminated or Roblox is having problems!')
-      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`,'{"usercode":"0x1"}',function (err) {
+      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`,'{"usercode":"0x2","reason":`${reason}`',function (err) {
         if (err) {
           console.error(err)
           return msg.reply(err)
