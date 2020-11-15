@@ -57,10 +57,16 @@ class BanCommand extends Command {
       async function uploadFile() {
           await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`)
       }
-      uploadFile()
       uploadFile().catch(e => {
         console.error(e)
         return msg.reply(e.response.statusMessage)
+      })
+      async function makePublic() {
+        await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic()
+      }
+      makePublic().catch(e => {
+        console.error(e)
+        return msg.reply(e)
       })
       return msg.reply(`${RBXUSER} successfully banned!`)
       }
