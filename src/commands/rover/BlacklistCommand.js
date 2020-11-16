@@ -50,7 +50,7 @@ class BlacklistCommand extends Command {
         resolveWithFullResponse: true
       })
       if (banexists.statusCode == 200) {
-        if (JSON.parse(banexists).usercode == '0x2') return msg.reply('User is already banned!')
+        if (JSON.parse(banexists.body).usercode == '0x2') return msg.reply('User is already banned!')
       }
       fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`,'{"usercode":"0x1"}',function (err) {
         if (err) {
