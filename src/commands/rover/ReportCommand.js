@@ -40,6 +40,7 @@ class ReportCommand extends Command {
     const description = args.description
     let RBXID = 'Unknown'
     let RBXUSER = 'Unknown'
+    if (description.match(/(https?:\/\/)(www\.|web\.)?(roblox\.com)/g)) return msg.reply('Profile links are not acceptable evidence!')
     if (rbxuser.match(/(<|>)/g)) rbxuser = rbxuser.replace(/(<|>)/g,'')
     try {
       const response = await request({
@@ -65,7 +66,7 @@ class ReportCommand extends Command {
     }
     /* Make sure it's a real url */
     if ((RBXID) && (evidence.match('^(https:\/\/|http:\/\/|<https:\/\/|<http:\/\/.)\S*'))) {
-    const discordSend =  await request({uri: config.reportWebhookURL, method:'POST', json: true, body: embed})
+    await request({uri: config.reportWebhookURL, method:'POST', json: true, body: embed})
     return msg.reply('Report sent!')
     }
     else if (RBXID == undefined) {
