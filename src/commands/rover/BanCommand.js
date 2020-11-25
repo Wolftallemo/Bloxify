@@ -63,10 +63,14 @@ class BanCommand extends Command {
           console.error(e)
           return msg.reply(e)
         })
-        await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
-          console.error(e)
-          return msg.reply(e)
-        })
+        request(`https://storage.googleapis.com/${config.bucket}/${RBXID}.json`,{resolveWithFullResponse: true}),function(error,response,body) {
+          if (response.statusCode == 403) {
+            await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
+              console.error(e)
+              return msg.reply(e)
+            })
+          }
+        }
       }
       catch (e) {
         console.error(e)
