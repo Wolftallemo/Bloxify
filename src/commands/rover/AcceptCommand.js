@@ -59,6 +59,7 @@ class AcceptCommand extends Command {
                                 formData: email
                             },function (error,response,body) {
                                 if (response.statusCode == 200) {
+                                    msg.guild.members.unban(args.userid)
                                     return msg.reply('Appeal accepted and user emailed!')
                                 }
                                 else {
