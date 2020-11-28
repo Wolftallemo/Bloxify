@@ -432,7 +432,7 @@ class DiscordMember {
         case 404: {
           // User isn't in the database.
           // Add the "Not Verified" role to the user
-          status(':bulb: Checking bloxlink registry...')
+          status(':scroll: Could not find information from RoVer, checking bloxlink registry...')
                   let bloxlinkdata = ''
                   try {
                     bloxlinkdata = await request({
