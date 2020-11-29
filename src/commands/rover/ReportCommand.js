@@ -40,7 +40,7 @@ class ReportCommand extends Command {
     const description = args.description
     let RBXID = 'Unknown'
     let RBXUSER = 'Unknown'
-    if (description.match(/(https?:\/\/)(www\.|web\.)?(roblox\.com)/g)) return msg.reply('Profile links are not acceptable evidence!')
+    if (description.match(/(https?:\/\/)(www\.|web\.)?(roblox\.com)/g)) return msg.reply('Roblox links are not acceptable evidence!')
     if (rbxuser.match(/(<|>)/g)) rbxuser = rbxuser.replace(/(<|>)/g,'')
     try {
       const response = await request({
