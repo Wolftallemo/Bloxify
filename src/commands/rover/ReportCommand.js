@@ -59,7 +59,7 @@ class ReportCommand extends Command {
           "title": "Exploiter Report",
           "description": `<@${msg.author.id}> has reported ${RBXUSER} for exploiting!\n\nReason: ${description}\n\n[Evidence](${evidence})`,
           "footer": {
-            "text": `Reporter ID: ${msg.author.id}`
+            "text": `Reporter: ${msg.author.tag} - ${msg.author.id}`
           }
         }
       ]
