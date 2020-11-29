@@ -2,6 +2,7 @@ const Command = require('../Command')
 const config = require('../../data/client.json')
 const fs = require('fs')
 const request = require('request-promise')
+const url = require('url')
 
 module.exports =
 class ReportCommand extends Command {
@@ -64,16 +65,20 @@ class ReportCommand extends Command {
         }
       ]
     }
-    /* Make sure it's a real url */
-    if ((RBXID) && (evidence.match('^(https:\/\/|http:\/\/|<https:\/\/|<http:\/\/.)\S*'))) {
-    await request({uri: config.reportWebhookURL, method:'POST', json: true, body: embed})
-    return msg.reply('Report sent!')
-    }
-    else if (RBXID == undefined) {
-      return msg.reply('User does not exist! (If you used a profile link, type their username instead)')
+    if (RBXID) {
+      let validurl = true
+      try {
+        await request({uri: evidence, options: {simple: false, resolveWithFullResponse: true}})
+      }
+      catch {
+        validurl = false
+      }
+      if (!validurl) return msg.reply('Something went wrong, please make sure the url you provided is valid (it must contain `http://` or `https://`).')
+      await request({uri: config.reportWebhookURL, method:'POST', json: true, body: embed})
+      return msg.reply('Report sent!')
     }
     else {
-      return msg.reply('Something went wrong, please make sure the url of your evidence begins with `http://` or `https://`')
+      return msg.reply('User does not exist! (If you used a profile link, type their username instead)')
     }
   }
 }
