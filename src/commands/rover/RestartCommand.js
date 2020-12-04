@@ -16,6 +16,6 @@ class RestartCommand extends Command {
     }
     async fn (msg) {
         await msg.channel.send('Restarting...')
-        process.exit(1) // This only works if you have a systemd service set to restart process on failure!
+        process.exit()
     }
 }
