@@ -56,7 +56,6 @@ class DiscordBot {
     // Set a reference to this instance inside of the client
     // for use in Commando modules. Is this bad? Probably.
     this.bot.discordBot = this
-    module.exports.botUser = this.bot
 
     // Events
 
