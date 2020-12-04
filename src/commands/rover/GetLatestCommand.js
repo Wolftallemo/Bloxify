@@ -25,7 +25,7 @@ class GetLatestCommand extends Command {
             await msg.reply(stdout)
             if (stdout.match((/Already up to date\./i))) return
             await msg.channel.send('Restarting...')
-            await DiscordBot.bot.destroy()
+            await DiscordBot.endSession()
             process.exit()
         })
     }
