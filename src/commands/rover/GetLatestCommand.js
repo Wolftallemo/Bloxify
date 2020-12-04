@@ -22,7 +22,7 @@ class GetLatestCommand extends Command {
                 return msg.reply(error)
             }
             await msg.reply(stdout)
-            if (stdout === 'Already up to date.\n') return
+            if (stdout.match((/Already up to date\./i))) return
             await msg.channel.send('Restarting...')
             process.exit()
         })
