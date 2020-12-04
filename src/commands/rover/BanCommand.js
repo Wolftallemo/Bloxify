@@ -59,7 +59,7 @@ class BanCommand extends Command {
       })
       const storage = new Storage({keyFilename: config.serviceKeyPath})
       try {
-        await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`).catch(e => {
+        await storage.bucket(config.bucket).upload(`./${RBXID}.json`).catch(e => {
           console.error(e)
           return msg.reply(e)
         })
