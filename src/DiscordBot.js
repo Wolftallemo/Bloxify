@@ -56,6 +56,7 @@ class DiscordBot {
     // Set a reference to this instance inside of the client
     // for use in Commando modules. Is this bad? Probably.
     this.bot.discordBot = this
+    module.exports.botUser = this.bot
 
     // Events
 
@@ -119,9 +120,6 @@ class DiscordBot {
   ready () {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
     this.bot.user.setActivity('OOFOOFOOFOOFOOF', { type: 'PLAYING' })
-  }
-  async endSession() {
-    this.bot.destroy()
   }
 
   /**
