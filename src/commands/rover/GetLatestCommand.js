@@ -16,7 +16,7 @@ class GetLatestCommand extends Command {
         return msg.member.id === config.owner
     }
     async fn (msg) {
-        exec('git pull', function(error, stdout, stderr) {
+        exec('git pull', async function(error, stdout, stderr) {
             if (error) {
                 console.error(error)
                 return msg.reply(error)
