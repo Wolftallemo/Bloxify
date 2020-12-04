@@ -51,7 +51,7 @@ class BanCommand extends Command {
         return msg.reply(`An error occured! ${e}`)
       }
       if (!RBXID) return msg.reply('Either this user was terminated or Roblox is having problems!')
-      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`,`{"usercode":"0x2","reason":"${reason}"}`,function (err) {
+      fs.writeFile(`./${RBXID}.json`,`{"usercode":"0x2","reason":"${reason}"}`,function (err) {
         if (err) {
           console.error(err)
           return msg.reply(err)
@@ -73,7 +73,10 @@ class BanCommand extends Command {
         console.error(e)
         return msg.reply(e)
       }
-      return msg.reply(`${RBXUSER} successfully banned!`)
+      await msg.reply(`${RBXUSER} successfully banned!`)
+      fs.unlink(`./${RBXID}.json`, function (err) {
+        if (err) console.error(err)
+      })
     }
     else {
       return msg.reply('You do not have your game moderator roles/users added!')

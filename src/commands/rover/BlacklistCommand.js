@@ -52,7 +52,7 @@ class BlacklistCommand extends Command {
       if (banexists.statusCode == 200) {
         if (JSON.parse(banexists.body).usercode == '0x2') return msg.reply('User is already banned!')
       }
-      fs.writeFileSync(`${config.banFilesPath}/${RBXID}.json`,'{"usercode":"0x1"}',function (err) {
+      fs.writeFile(`./${RBXID}.json`,'{"usercode":"0x1"}',function (err) {
         if (err) {
           console.error(err)
           return msg.reply(err)
@@ -60,7 +60,7 @@ class BlacklistCommand extends Command {
       })
       const storage = new Storage({keyFilename: config.serviceKeyPath})
       try {
-        await storage.bucket(config.bucket).upload(`${config.banFilesPath}/${RBXID}.json`).catch(e => {
+        await storage.bucket(config.bucket).upload(`./${RBXID}.json`).catch(e => {
           console.error(e)
           return msg.reply(e)
         })
@@ -74,7 +74,10 @@ class BlacklistCommand extends Command {
         console.error(e)
         return msg.reply(e)
       }
-      return msg.reply(`${RBXUSER} successfully blacklisted!`)
+      await msg.reply(`${RBXUSER} successfully blacklisted!`)
+      fs.unlink(`./${RBXID}.json`, function (err) {
+        if (err) console.error(err)
+      })
     }
     else {
       return msg.reply('You do not have your game moderator roles/users added!')
