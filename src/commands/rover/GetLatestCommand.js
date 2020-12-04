@@ -22,8 +22,10 @@ class GetLatestCommand extends Command {
                 return msg.reply(error)
             }
             await msg.reply(stdout)
-            await msg.channel.send('Restarting...')
-            process.exit()
+            if (stdout !== 'Already up to date.') {
+                await msg.channel.send('Restarting...')
+                process.exit()
+            }
         })
     }
 }
