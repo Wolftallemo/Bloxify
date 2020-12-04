@@ -118,6 +118,7 @@ class DiscordBot {
    */
   ready () {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
+    this.bot.user.setActivity('pu uoy evig annog reveN', { type: 'PLAYING' })
   }
 
   /**
