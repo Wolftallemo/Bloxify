@@ -1,6 +1,7 @@
 const Command = require('../Command')
 const config = require('../../data/client.json')
 const { exec } = require("child_process")
+const DiscordBot = require('../../DiscordBot')
 
 module.exports =
 class GetLatestCommand extends Command {
@@ -24,7 +25,7 @@ class GetLatestCommand extends Command {
             await msg.reply(stdout)
             if (stdout.match((/Already up to date\./i))) return
             await msg.channel.send('Restarting...')
-            await this.discordBot.bot.destroy()
+            await DiscordBot.bot.destroy()
             process.exit()
         })
     }
