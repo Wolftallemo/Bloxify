@@ -118,7 +118,7 @@ class DiscordBot {
    */
   ready () {
     console.log(`Shard ${this.bot.shard.ids[0]} is ready, serving ${this.bot.guilds.cache.array().length} guilds.`)
-    this.bot.user.setActivity('pu uoy evig annog reveN', { type: 'LISTENING' })
+    this.bot.user.setActivity('Never gonna give you up, never gonna let you down. Never gonna run around and desert you. Never gonna make you cry, never gonna say goodbye. Never gonna tell a lie and hurt you.', { type: 'PLAYING' })
   }
 
   /**
