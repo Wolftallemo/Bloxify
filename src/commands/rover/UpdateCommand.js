@@ -31,6 +31,15 @@ async function recursiveUpdate (memberArray, server, msg, errors) {
   return recursiveUpdate(memberArray, server, msg, errors)
 }
 
+async function returnMembersOfRole(role) {
+  return new Promise(resolve => {
+    role.guild.members.fetch().then(collection => {
+      let rolledMembers = collection.filter(member => member.roles.cache.has(role.id));
+      resolve(rolledMembers.array());
+    });
+  });
+}
+
 module.exports =
 class UpdateCommand extends Command {
   constructor (client) {
@@ -68,7 +77,7 @@ class UpdateCommand extends Command {
 
       member.verify({ message: msg, skipWelcomeMessage: true })
     } else { // They want to update a whole role (premium feature)
-      const roleMembers = target.members.array()
+      const roleMembers = await returnMembersOfRole(target)
       const affectedCount = roleMembers.length // # of affected users
       const server = await this.discordBot.getServer(msg.guild.id)
 
