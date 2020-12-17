@@ -24,21 +24,16 @@ class AppealBanCommand extends Command {
         return msg.member.roles.cache.some(role => config.appealsManagerRole.includes(role.id))
     }
     async fn (msg, args) {
-        const queryval = [args.userid]
-        client.query('SELECT * FROM appeals WHERE discord_id = $1;',queryval)
-        .then(res => {
-            if (res.rows[0]) {
-                client.query('UPDATE auth SET blocked = true WHERE discord_id = $1;',queryval)
-                .catch(e => {
-                    console.error(e)
-                    return msg.reply(`An error occured! ${e}`)
-                })
-                return msg.reply('User has been banned from the form!')
-            }
-        })
-        .catch(e => {
+        try {
+            const queryval = [args.userid]
+            const app = await client.query('SELECT * FROM appeals WHERE discord_id = $1;',queryval)
+            if (!app.rows[0]) return msg.reply('This user is not in the database!')
+            await client.query('UPDATE auth SET blocked = true WHERE discord_id = $1;',queryval)
+            return msg.reply('User has been banned from the form!')
+        }
+        catch (e) {
             console.error(e)
-            return msg.reply(`An error occured! ${e}`)
-        })
+            return msg.reply(e)
+        }
     }
 }
