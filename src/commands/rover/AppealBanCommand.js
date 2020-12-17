@@ -26,7 +26,7 @@ class AppealBanCommand extends Command {
     async fn (msg, args) {
         try {
             const queryval = [args.userid]
-            const app = await client.query('SELECT * FROM appeals WHERE discord_id = $1;',queryval)
+            const user = await client.query('SELECT * FROM auth WHERE discord_id = $1;',queryval)
             if (!app.rows[0]) return msg.reply('This user is not in the database!')
             await client.query('UPDATE auth SET blocked = true WHERE discord_id = $1;',queryval)
             return msg.reply('User has been banned from the form!')
