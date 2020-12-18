@@ -30,7 +30,7 @@ class DuckCommand extends Command {
     }
     const embed = new Discord.MessageEmbed()
       .setTitle(':duck: QUACK! A random duck for you!')
-      .setFooter('Powered by random-d.uk')
+      .setFooter(message)
       .setImage(`${image}`)
     return msg.embed(embed)
   }

@@ -46,20 +46,20 @@ class ForceEmailCommand extends Command {
               html: `<html>${args.message}<br/><br/>This email was sent from an address that cannot receive</html>`
             }
             const mailgunApiKey = Buffer.from(`api:${config.mailgunApiKey}`, 'utf8')
-            const base64_mailgunApiKey = mailgunApiKey.toString('base64')
-            if (config.mailgunRegion != 'eu') {
+            const base64MailgunApiKey = mailgunApiKey.toString('base64')
+            if (config.mailgunRegion !== 'eu') {
               request.post({
                 uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
                 headers: {
                   'Content-Type': 'multipart/form-data',
-                  Authorization: `Basic ${base64_mailgunApiKey}`
+                  Authorization: `Basic ${base64MailgunApiKey}`
                 },
                 formData: email
               }, function (error, response, body) {
-                if (response.statusCode == 200) {
+                if (response.statusCode === 200) {
                   return msg.reply('Message sent!')
                 } else {
-                  return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
+                  return msg.reply(`Mailgun returned an error! (${error})`)
                 }
               })
             } else {
@@ -67,13 +67,14 @@ class ForceEmailCommand extends Command {
                 uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
                 headers: {
                   'Content-Type': 'multipart/form-data',
-                  Authorization: `Basic ${base64_mailgunApiKey}`
+                  Authorization: `Basic ${base64MailgunApiKey}`
                 },
                 formData: email
               }, function (error, response, body) {
-                if (response.statusCode == 200) {
+                if (response.statusCode === 200) {
                   return msg.reply('Message sent!')
                 } else {
+                  console.error(error)
                   return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                 }
               })

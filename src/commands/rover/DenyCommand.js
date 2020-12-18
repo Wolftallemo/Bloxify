@@ -50,19 +50,20 @@ class DenyCommand extends Command {
                   html: `<html>After careful consideration, the moderation team has decided to deny your appeal. We understand that you wish to be unbanned but as of right now we will not accept your appeal. If you have more information that you believe may change this decision, you may send another appeal.<br/><br/>Note from the moderation team: ${args.note}</html>`
                 }
                 const mailgunApiKey = Buffer.from(`api:${config.mailgunApiKey}`, 'utf8')
-                const base64_mailgunApiKey = mailgunApiKey.toString('base64')
-                if (config.mailgunRegion != 'eu') {
+                const base64MailgunApiKey = mailgunApiKey.toString('base64')
+                if (config.mailgunRegion !== 'eu') {
                   request.post({
                     uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
                     headers: {
                       'Content-Type': 'multipart/form-data',
-                      Authorization: `Basic ${base64_mailgunApiKey}`
+                      Authorization: `Basic ${base64MailgunApiKey}`
                     },
                     formData: email
                   }, function (error, response, body) {
-                    if (response.statusCode == 200) {
+                    if (response.statusCode === 200) {
                       return msg.reply('Appeal denied and user emailed!')
                     } else {
+                      console.error(error)
                       return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                     }
                   })
@@ -71,13 +72,14 @@ class DenyCommand extends Command {
                     uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
                     headers: {
                       'Content-Type': 'multipart/form-data',
-                      Authorization: `Basic ${base64_mailgunApiKey}`
+                      Authorization: `Basic ${base64MailgunApiKey}`
                     },
                     formData: email
                   }, function (error, response, body) {
-                    if (response.statusCode == 200) {
+                    if (response.statusCode === 200) {
                       return msg.reply('Appeal denied and user emailed!')
                     } else {
+                      console.error(error)
                       return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                     }
                   })

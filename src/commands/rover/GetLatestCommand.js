@@ -1,7 +1,6 @@
 const Command = require('../Command')
 const config = require('../../data/client.json')
 const { exec } = require('child_process')
-const DiscordBot = require('../../DiscordBot')
 
 module.exports =
 class GetLatestCommand extends Command {

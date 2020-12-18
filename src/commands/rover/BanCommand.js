@@ -36,8 +36,7 @@ class BanCommand extends Command {
 
   async fn (msg, args) {
     const rbxuser = args.rbxuser
-    let reason = args.reason
-    if (reason.match(/(["])/g)) reason = reason.replace(/(["])/g, '\"')
+    const reason = args.reason
     if ((config.gameModeratorRole) || (config.gameModeratorUsers)) {
       let RBXID = 'Unknown'
       let RBXUSER = 'Unknown'
@@ -66,7 +65,7 @@ class BanCommand extends Command {
           return msg.reply(e)
         })
         const fileCheck = await request(`https://storage.googleapis.com/${config.bucket}/${RBXID}.json`, { resolveWithFullResponse: true })
-        if (fileCheck.statusCode == 403) {
+        if (fileCheck.statusCode === 403) {
           await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
             console.error(e)
             return msg.reply(e)

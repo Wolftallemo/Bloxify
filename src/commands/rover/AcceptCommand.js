@@ -50,20 +50,21 @@ class AcceptCommand extends Command {
                   html: `<html>Your appeal was accepted, you may join us again at our <a href="${config.appealsInvite}" target="_blank">discord server</a>.<br/><br/>Note from the moderation team: ${args.note}</html>`
                 }
                 const mailgunApiKey = Buffer.from(`api:${config.mailgunApiKey}`, 'utf8')
-                const base64_mailgunApiKey = mailgunApiKey.toString('base64')
-                if (config.mailgunRegion != 'eu') {
+                const base64MailgunApiKey = mailgunApiKey.toString('base64')
+                if (config.mailgunRegion !== 'eu') {
                   request.post({
                     uri: `https://api.mailgun.net/v3/${config.mailgunDomain}/messages`,
                     headers: {
                       'Content-Type': 'multipart/form-data',
-                      Authorization: `Basic ${base64_mailgunApiKey}`
+                      Authorization: `Basic ${base64MailgunApiKey}`
                     },
                     formData: email
                   }, function (error, response, body) {
-                    if (response.statusCode == 200) {
+                    if (response.statusCode === 200) {
                       msg.guild.members.unban(args.userid).catch()
                       return msg.reply('Appeal accepted and user emailed!')
                     } else {
+                      console.error(error)
                       return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                     }
                   })
@@ -72,14 +73,15 @@ class AcceptCommand extends Command {
                     uri: `https://api.eu.mailgun.net/v3/${config.mailgunDomain}/messages`,
                     headers: {
                       'Content-Type': 'multipart/form-data',
-                      Authorization: `Basic ${base64_mailgunApiKey}`
+                      Authorization: `Basic ${base64MailgunApiKey}`
                     },
                     formData: email
                   }, function (error, response, body) {
-                    if (response.statusCode == 200) {
+                    if (response.statusCode === 200) {
                       msg.guild.members.unban(args.userid).catch()
                       return msg.reply('Appeal accepted and user emailed!')
                     } else {
+                      console.error(error)
                       return msg.reply(`Mailgun returned an error! (HTTP ${response.statusCode}: ${response.statusMessage})`)
                     }
                   })

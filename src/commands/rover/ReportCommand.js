@@ -1,8 +1,6 @@
 const Command = require('../Command')
 const config = require('../../data/client.json')
-const fs = require('fs')
 const request = require('request-promise')
-const url = require('url')
 
 module.exports =
 class ReportCommand extends Command {

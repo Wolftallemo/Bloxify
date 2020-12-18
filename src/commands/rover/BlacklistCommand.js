@@ -50,8 +50,8 @@ class BlacklistCommand extends Command {
         simple: false,
         resolveWithFullResponse: true
       })
-      if (banexists.statusCode == 200) {
-        if (JSON.parse(banexists.body).usercode == '0x2') return msg.reply('User is already banned!')
+      if (banexists.statusCode === 200) {
+        if (JSON.parse(banexists.body).usercode === '0x2') return msg.reply('User is already banned!')
       }
       fs.writeFile(`./${RBXID}.json`, '{"usercode":"0x1"}', function (err) {
         if (err) {
@@ -66,7 +66,7 @@ class BlacklistCommand extends Command {
           return msg.reply(e)
         })
         const fileCheck = await request(`https://storage.googleapis.com/${config.bucket}/${RBXID}.json`, { resolveWithFullResponse: true })
-        if (fileCheck.statusCode == 403) {
+        if (fileCheck.statusCode === 403) {
           await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
             console.error(e)
             return msg.reply(e)
