@@ -31,7 +31,8 @@ class WhoisCommand extends Command {
   // This is probably the worst file in the entire project, so prepare yourself.
   // TODO: DRY this up and make the method that gets user data a method in DiscordMember
   async fn (msg, args) {
-    const member = args.member
+    let member = args.member
+    if (!member) member = msg.member
     let data = {}
     if (member) { // If the member specified exists,
       const editMessage = await msg.reply(`:mag: Looking up ${member.displayName.replace(/@/g, '')}`)
