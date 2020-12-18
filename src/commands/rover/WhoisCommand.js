@@ -130,7 +130,7 @@ class WhoisCommand extends Command {
             url: profileLink,
             icon_url: avatarURL
           },
-          color: args.member.displayColor,
+          color: member.displayColor,
           thumbnail: {
             url: avatarURL
           },
