@@ -31,13 +31,13 @@ async function recursiveUpdate (memberArray, server, msg, errors) {
   return recursiveUpdate(memberArray, server, msg, errors)
 }
 
-async function returnMembersOfRole(role) {
+async function returnMembersOfRole (role) {
   return new Promise(resolve => {
     role.guild.members.fetch().then(collection => {
-      let rolledMembers = collection.filter(member => member.roles.cache.has(role.id));
-      resolve(rolledMembers.array());
-    });
-  });
+      const rolledMembers = collection.filter(member => member.roles.cache.has(role.id))
+      resolve(rolledMembers.array())
+    })
+  })
 }
 
 module.exports =

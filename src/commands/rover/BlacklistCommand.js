@@ -1,7 +1,7 @@
 const Command = require('../Command')
 const config = require('../../data/client.json')
 const fs = require('fs')
-const {Storage} = require('@google-cloud/storage')
+const { Storage } = require('@google-cloud/storage')
 const request = require('request-promise')
 
 module.exports =
@@ -19,10 +19,12 @@ class BlacklistCommand extends Command {
           prompt: 'What is their roblox username?',
           type: 'string'
         }
-      ]}
+      ]
+    }
     )
   }
-  hasPermission(msg) {
+
+  hasPermission (msg) {
     return config.gameModeratorUsers.includes(msg.author.id) || msg.members.roles.cache.some(role => config.gameModeratorRole.includes(role.id))
   }
 
@@ -39,8 +41,7 @@ class BlacklistCommand extends Command {
         })
         RBXID = JSON.parse(response.body).Id
         RBXUSER = JSON.parse(response.body).Username
-      }
-      catch (e) {
+      } catch (e) {
         return msg.reply(`An error occured! ${e}`)
       }
       if (!RBXID) return msg.reply('Either this user was terminated or Roblox is having problems!')
@@ -52,25 +53,26 @@ class BlacklistCommand extends Command {
       if (banexists.statusCode == 200) {
         if (JSON.parse(banexists.body).usercode == '0x2') return msg.reply('User is already banned!')
       }
-      fs.writeFile(`./${RBXID}.json`,'{"usercode":"0x1"}',function (err) {
+      fs.writeFile(`./${RBXID}.json`, '{"usercode":"0x1"}', function (err) {
         if (err) {
           console.error(err)
           return msg.reply(err)
         }
       })
-      const storage = new Storage({keyFilename: config.serviceKeyPath})
+      const storage = new Storage({ keyFilename: config.serviceKeyPath })
       try {
         await storage.bucket(config.bucket).upload(`./${RBXID}.json`).catch(e => {
           console.error(e)
           return msg.reply(e)
         })
-        const fileCheck = await request(`https://storage.googleapis.com/${config.bucket}/${RBXID}.json`,{resolveWithFullResponse: true})
-        if (fileCheck.statusCode == 403) await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
-          console.error(e)
-          return msg.reply(e)
-        })
-      }
-      catch (e) {
+        const fileCheck = await request(`https://storage.googleapis.com/${config.bucket}/${RBXID}.json`, { resolveWithFullResponse: true })
+        if (fileCheck.statusCode == 403) {
+          await storage.bucket(config.bucket).file(`${RBXID}.json`).makePublic().catch(e => {
+            console.error(e)
+            return msg.reply(e)
+          })
+        }
+      } catch (e) {
         console.error(e)
         return msg.reply(e)
       }
@@ -78,8 +80,7 @@ class BlacklistCommand extends Command {
       fs.unlink(`./${RBXID}.json`, function (err) {
         if (err) console.error(err)
       })
-    }
-    else {
+    } else {
       return msg.reply('You do not have your game moderator roles/users added!')
     }
   }

@@ -18,7 +18,7 @@ class HttpduckCommand extends Command {
           type: 'integer'
         }
       ]
-      }
+    }
     )
   }
 
@@ -31,15 +31,13 @@ class HttpduckCommand extends Command {
       const code = JSON.parse(response).http.toString().match(args.httpstatus)
       if (code) {
         const embed = new Discord.MessageEmbed()
-        .setFooter('Powered by random-d.uk')
-        .setImage(`https://random-d.uk/api/http/${code}`)
+          .setFooter('Powered by random-d.uk')
+          .setImage(`https://random-d.uk/api/http/${code}`)
         return msg.embed(embed)
-      }
-      else {
+      } else {
         return msg.reply('We do not have a duck with that status code yet!')
       }
-    }
-    catch(e) {
+    } catch (e) {
       return msg.reply(`An error occured! ${e}`)
     }
   }
