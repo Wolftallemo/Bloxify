@@ -13,7 +13,7 @@
     "request-debug": "^0.2.0",
     "request-promise": "^4.2.0",
     "standard": "^16.0.3",
-    "utf-8-validate": "^5.0.3",
+    "utf-8-validate": "^5.0.4",
     "uws": "^200.0.0",
     "zlib-sync": "^0.1.7"
   },
