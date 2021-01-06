@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@google-cloud/storage": "^5.5.0",
-    "bufferutil": "^4.0.1",
+    "bufferutil": "^4.0.3",
     "common-tags": "^1.7.2",
     "discord.js": "^12.5.1",
     "discord.js-commando": "git://github.com/discordjs/Commando.git#bdbd84e2a978322f3af12c21e729eb7b7cd4a3dc",
