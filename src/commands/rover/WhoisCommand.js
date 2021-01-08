@@ -139,15 +139,6 @@ class WhoisCommand extends Command {
           { name: 'Membership', value: bc, inline: true }
         ]
       }
-
-      // Edit so past names don't show unless you actually have some!
-      if (pastNames !== 'Unknown') {
-        embed.fields.push({
-          name: 'Past Usernames',
-          value: pastName,
-          inline: true
-        })
-      }
         
       // Nickname Group rank display
       const nicknameGroup = this.server.getSetting('nicknameGroup')
@@ -168,12 +159,20 @@ class WhoisCommand extends Command {
           description: bio,
           fields: [
             { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true },
-            { name: 'Past Usernames', value: pastNames, inline: true }
+            { name: 'Membership', value: bc, inline: true }
           ]
         }
 
-      // Nickname Group rank display
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames !== 'Unknown') {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastNames,
+            inline: true
+          })
+        }
+        
+        // Nickname Group rank display
         const nicknameGroup = this.server.getSetting('nicknameGroup')
         if (nicknameGroup) {
           const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
