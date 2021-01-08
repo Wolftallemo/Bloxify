@@ -121,39 +121,6 @@ class WhoisCommand extends Command {
 
       // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
       bio = bio.replace('@', '@ ')
-        const embed = {
-          title: 'View Profile',
-          url: profileLink,
-          author: {
-            name: data.robloxUsername,
-            url: profileLink,
-            icon_url: avatarURL
-          },
-          color: args.member.displayColor,
-          thumbnail: {
-            url: avatarURL
-          },
-          description: bio,
-          fields: [
-            { name: 'Join Date', value: joinDate, inline: true },
-            { name: 'Membership', value: bc, inline: true }
-          ]
-        }
-
-        // Edit so past names don't show unless you actually have some!
-        if (pastNames !== 'Unknown') {
-          embed.fields.push({
-            name: 'Past Usernames',
-            value: pastName,
-            inline: true
-          })
-        }
-        
-        // Nickname Group rank display
-        const nicknameGroup = this.server.getSetting('nicknameGroup')
-        if (nicknameGroup) {
-          const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
-
       const embed = {
         title: 'View Profile',
         url: profileLink,
@@ -162,43 +129,74 @@ class WhoisCommand extends Command {
           url: profileLink,
           icon_url: avatarURL
         },
-        color: member.displayColor,
+        color: args.member.displayColor,
         thumbnail: {
           url: avatarURL
         },
         description: bio,
         fields: [
           { name: 'Join Date', value: joinDate, inline: true },
-          { name: 'Membership', value: bc, inline: true },
-          { name: 'Past Usernames', value: pastNames, inline: true }
+          { name: 'Membership', value: bc, inline: true }
         ]
       }
 
+      // Edit so past names don't show unless you actually have some!
+      if (pastNames !== 'Unknown') {
+        embed.fields.push({
+          name: 'Past Usernames',
+          value: pastName,
+          inline: true
+        })
+      }
+        
       // Nickname Group rank display
       const nicknameGroup = this.server.getSetting('nicknameGroup')
       if (nicknameGroup) {
         const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
-
-        const serverGroup = userGroups.find(group => group.Id === parseInt(nicknameGroup))
-
-        let isAlly = false
-        if (!serverGroup) {
-          isAlly = await VirtualGroups._Relationship({ id: data.robloxId }, parseInt(nicknameGroup), DiscordServer, 'allies')
+        const embed = {
+          title: 'View Profile',
+          url: profileLink,
+          author: {
+            name: data.robloxUsername,
+            url: profileLink,
+            icon_url: avatarURL
+          },
+          color: member.displayColor,
+          thumbnail: {
+            url: avatarURL
+          },
+          description: bio,
+          fields: [
+            { name: 'Join Date', value: joinDate, inline: true },
+            { name: 'Membership', value: bc, inline: true },
+            { name: 'Past Usernames', value: pastNames, inline: true }
+          ]
         }
-        if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
 
-        embed.fields.push({
-          name: 'Group Rank',
-          value: isAlly ? 'Ally' : (serverGroup ? serverGroup.Role : 'Guest')
-        })
-      }
+      // Nickname Group rank display
+        const nicknameGroup = this.server.getSetting('nicknameGroup')
+        if (nicknameGroup) {
+          const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
 
-      if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'Virgil Contributor', inline: true })
+          const serverGroup = userGroups.find(group => group.Id === parseInt(nicknameGroup))
 
-      editMessage.edit({ embed: embed }).catch(console.error)
-    } else {
+          let isAlly = false
+          if (!serverGroup) {
+            isAlly = await VirtualGroups._Relationship({ id: data.robloxId }, parseInt(nicknameGroup), DiscordServer, 'allies')
+          }
+          if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
+
+          embed.fields.push({
+            name: 'Group Rank',
+            value: isAlly ? 'Ally' : (serverGroup ? serverGroup.Role : 'Guest')
+          })
+        }
+
+        if (Contributors.includes(id)) embed.fields.push({ name: 'User Tags', value: 'Virgil Contributor', inline: true })
+        editMessage.edit({ embed: embed }).catch(console.error)
+      } else {
       editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
-    }
+      }
     }
   }
 }
