@@ -4,7 +4,7 @@ const DiscordServer = require('../../DiscordServer')
 const VirtualGroups = require('../../VirtualGroups')
 const request = require('request-promise')
 
-const Contributors = require('../../Contributors.json')
+const Accolades = require('../../Accolades.json')
 
 module.exports =
 class WhoisCommand extends Command {
@@ -121,6 +121,38 @@ class WhoisCommand extends Command {
 
       // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
       bio = bio.replace('@', '@ ')
+        const embed = {
+          title: 'View Profile',
+          url: profileLink,
+          author: {
+            name: data.robloxUsername,
+            url: profileLink,
+            icon_url: avatarURL
+          },
+          color: args.member.displayColor,
+          thumbnail: {
+            url: avatarURL
+          },
+          description: bio,
+          fields: [
+            { name: 'Join Date', value: joinDate, inline: true },
+            { name: 'Membership', value: bc, inline: true }
+          ]
+        }
+
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames !== 'Unknown') {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastName,
+            inline: true
+          })
+        }
+        
+        // Nickname Group rank display
+        const nicknameGroup = this.server.getSetting('nicknameGroup')
+        if (nicknameGroup) {
+          const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
 
       const embed = {
         title: 'View Profile',
@@ -153,6 +185,7 @@ class WhoisCommand extends Command {
         if (!serverGroup) {
           isAlly = await VirtualGroups._Relationship({ id: data.robloxId }, parseInt(nicknameGroup), DiscordServer, 'allies')
         }
+        if (Accolades[id]) embed.fields.push({ name: 'Accolades', value: `${Accolades[id]}`, inline: true })
 
         embed.fields.push({
           name: 'Group Rank',
@@ -165,6 +198,7 @@ class WhoisCommand extends Command {
       editMessage.edit({ embed: embed }).catch(console.error)
     } else {
       editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
+    }
     }
   }
 }
