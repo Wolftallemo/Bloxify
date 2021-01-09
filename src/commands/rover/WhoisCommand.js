@@ -65,85 +65,71 @@ class WhoisCommand extends Command {
         return editMessage.edit("An error occured while fetching that user's data.")
       }
 
-      if (apiUserData.Username) {
-        data.robloxUsername = apiUserData.Username
-      }
-      const profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
-      const avatarURL = `https://assetgame.roblox.com/Thumbs/Avatar.ashx?username=${encodeURIComponent(data.robloxUsername)}`
-
-      let bio = 'Bio failed to load'
-      let joinDate = 'Unknown'
-      let pastNames = 'Unknown'
-      try {
-        const profileSource = await request({
-          uri: profileLink
-        })
-
-        joinDate = profileSource.match(/Join Date<p class=text-lead>(.*?)<li/)[1]
-        bio = profileSource.match(/<meta name=description content=".*? is one of the millions playing, creating and exploring the endless possibilities of Roblox. Join .*? on Roblox and explore together! ?((?:.|\n)*?)"/m)[1]
-        pastNames = profileSource.match(/<span class=tooltip-pastnames data-toggle=tooltip title="?(.*?)"?>/)[1].substr(0, 1024)
-      } catch (e) {}
-
-      let bc = 'Unknown'
-      try {
-        bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
-        if (!bc) {
-          const response = await request({
-            uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/group-membership-status`,
-            simple: false,
-            resolveWithFullResponse: true
+      if (data.status === 'ok') {
+        let apiUserData = {}
+        try {
+          apiUserData = await request({
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}`,
+            json: true,
+            simple: false
           })
-
-          const membershipType = JSON.parse(response.body).membershipType
-          bc = 'Regular'
-
-          if (membershipType === 4) {
-            bc = 'Premium'
-          }
-
-          Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
+        } catch (e) {
+          return editMessage.edit("An error occured while fetching that user's data.")
         }
-      } catch (e) {}
+
+        if (apiUserData.name) {
+          data.robloxUsername = apiUserData.name
+        }
+        const profileLink = `https://www.roblox.com/users/${data.robloxId}/profile`
+        let avatarURLdata = {}
+        try {
+          avatarURLdata = await request({
+            uri: `https://thumbnails.roblox.com/v1/users/avatar?userIds=${data.robloxId}&size=720x720&format=png&isCircular=false`,
+            json: true
+          })
+        } catch (e) {
+          return editMessage.edit("An error occured while fetching that user's data.")
+        }
+        const avatarURL = avatarURLdata.data[0].imageUrl
+        let bio = 'Bio failed to load'
+        if (apiUserData.description) bio = apiUserData.description
+        let joinDate = new Date(apiUserData.created)
+        joinDate = `${joinDate.getMonth() + 1}/${joinDate.getDate()}/${joinDate.getFullYear()}`
+        let pastNames = ''
+        try {
+          const pastNamesData = await request({
+            uri: `https://users.roblox.com/v1/users/${data.robloxId}/username-history?limit=50&sortOrder=Desc`,
+            json: true,
+            simple: false
+          })
+          pastNamesData.data.forEach(oldname => pastNames += `, ${oldname.name}`)
+          if (pastNames) pastNames = pastNames.replace(', ', '')
+        } catch (e) {}
+
+        let bc = 'Unknown'
+        try {
+          bc = await Cache.get(`bindings.${data.robloxId}`, 'bc')
+          if (!bc) {
+            const response = await request({
+              uri: `https://groups.roblox.com/v1/users/${encodeURIComponent(data.robloxId)}/group-membership-status`,
+              simple: false,
+              resolveWithFullResponse: true
+            })
+
+            const membershipType = JSON.parse(response.body).membershipType
+            bc = 'Regular'
+
+            if (membershipType === 4) {
+              bc = 'Premium'
+            }
+
+            Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
+          }
+        } catch (e) {}
 
       // Make sure the data is cached so we don't have to use the API in the future
       Cache.set('users', id, data)
 
-      // Remove excess new lines in the bio
-      while ((bio.match(/\n/mg) || []).length > 3) {
-        const lastN = bio.lastIndexOf('\n')
-        bio = bio.slice(0, lastN) + bio.slice(lastN + 1)
-      }
-
-      // Truncate bio if it's too long
-      if (bio.length > 500) {
-        bio = bio.substr(0, 500) + '...'
-      }
-
-      // Add a space after any @ symbols to prevent tagging @everyone, @here, and @anything else Discord adds
-      bio = bio.replace('@', '@ ')
-      const embed = {
-        title: 'View Profile',
-        url: profileLink,
-        author: {
-          name: data.robloxUsername,
-          url: profileLink,
-          icon_url: avatarURL
-        },
-        color: args.member.displayColor,
-        thumbnail: {
-          url: avatarURL
-        },
-        description: bio,
-        fields: [
-          { name: 'Join Date', value: joinDate, inline: true },
-          { name: 'Membership', value: bc, inline: true }
-        ]
-      }
-        
-      // Nickname Group rank display
-      const nicknameGroup = this.server.getSetting('nicknameGroup')
-      if (nicknameGroup) {
-        const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
         const embed = {
           title: 'View Profile',
           url: profileLink,
@@ -164,7 +150,7 @@ class WhoisCommand extends Command {
         }
 
         // Edit so past names don't show unless you actually have some!
-        if (pastNames !== 'Unknown') {
+        if (pastNames && pastNames !== []) {
           embed.fields.push({
             name: 'Past Usernames',
             value: pastNames,
