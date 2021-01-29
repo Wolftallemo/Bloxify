@@ -7,7 +7,6 @@ const { Cache } = require('./GlobalCache')
 const requestDebug = require('request-debug')
 const SettingProvider = require('./commands/SettingProvider')
 const Util = require('./Util')
-const fs = require('mz/fs')
 
 if (config.loud) requestDebug(request, (type, data) => console.log(`${type} ${data.debugId} : ${data.uri || data.statusCode}`))
 
@@ -39,8 +38,8 @@ class DiscordBot {
       messageCacheMaxSize: 0,
       retryLimit: 0,
       ws: {
-        intents: ["GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES"],
-      },
+        intents: ['GUILD_MEMBERS', 'GUILDS', 'GUILD_MESSAGES']
+      }
     })
 
     this.bot.setProvider(new SettingProvider())
@@ -62,14 +61,14 @@ class DiscordBot {
     // We use .bind(this) so that the context remains within
     // the class and not the event.
     // this.bot.on('debug', (info) => { console.log(`[DEBUG SHARD${this.bot.shard.ids[0]}] ${info}`)})
-    this.bot.on('warn', (info) => { console.log(`[WARN SHARD${this.bot.shard.ids[0]}] ${info}`)})
-    this.bot.on('rateLimit', (err) => { console.error(`[RL SHARD${this.bot.shard.ids[0]}] ${JSON.stringify(err)}`)})
-    this.bot.on('error', (err) => { console.error(`[ERR SHARD${this.bot.shard.ids[0]}] `, err)})
-    this.bot.on('shardError', (err, id) => { console.error(`[WS SHARD${id}] ${JSON.stringify(err)}`)})
-    this.bot.on('shardDisconnect', (event, id) => { console.error(`[WS SHARD${id}] ${JSON.stringify(event)}`)})
+    this.bot.on('warn', (info) => { console.log(`[WARN SHARD${this.bot.shard.ids[0]}] ${info}`) })
+    this.bot.on('rateLimit', (err) => { console.error(`[RL SHARD${this.bot.shard.ids[0]}] ${JSON.stringify(err)}`) })
+    this.bot.on('error', (err) => { console.error(`[ERR SHARD${this.bot.shard.ids[0]}] `, err) })
+    this.bot.on('shardError', (err, id) => { console.error(`[WS SHARD${id}] ${JSON.stringify(err)}`) })
+    this.bot.on('shardDisconnect', (event, id) => { console.error(`[WS SHARD${id}] ${JSON.stringify(event)}`) })
     process.on('unhandledRejection', (reason, promise) => {
-      console.log('Unhandled Rejection at:', promise, 'reason:', reason);
-    });
+      console.log('Unhandled Rejection at:', promise, 'reason:', reason)
+    })
     this.bot.on('ready', this.ready.bind(this))
     this.bot.on('guildMemberAdd', this.guildMemberAdd.bind(this))
 
@@ -87,11 +86,30 @@ class DiscordBot {
       })
     }
 
-    this.bot.dispatcher.addInhibitor(msg => {
-      if (!msg.guild) {
-        return
-      }
-    })
+    if (this.isPremium()) {
+      this.bot.dispatcher.addInhibitor(msg => {
+        if (msg.guild && !this.authorizedOwners.includes(msg.guild.ownerID)) {
+          if (this.authorizedOwners.length === 0) {
+            msg.reply('Sorry, the authorized users list is still being downloaded. This occurs when the bot has recently restarted. Please wait a few seconds and try again.')
+          } else {
+            msg.reply(`Sorry, this server isn't authorized to use RoVer Plus.${msg.member.hasPermission(['MANAGE_GUILD']) ? ' The server owner needs to donate at <https://www.patreon.com/erynlynn>, or you can invite the regular RoVer bot at <https://RoVer.link>.' : ''} If you are a patron encountering this issue, try running '${this.bot.commandPrefix}transferplus ${msg.guild.ownerID}'`) // notify sender to donate only if they're an "admin"
+          }
+
+          return 'not_premium'
+        }
+      })
+
+      this.updatePatrons()
+
+      setInterval(() => {
+        const beforePatrons = this.authorizedOwners
+        this.updatePatrons().catch((updateError) => {
+          console.error(`Patron update failed! ${updateError}`)
+
+          this.authorizedOwners = beforePatrons
+        })
+      }, 5 * 60 * 1000)
+    }
 
     // Register commands
     this.bot.registry

@@ -203,7 +203,7 @@ class DiscordServer {
     let groups = await Cache.get(`bindings.${userid}`, '__groups')
     if (!groups) {
       groups = await request({
-        uri: `http://api.roblox.com/users/${userid}/groups`,
+        uri: `https://groups.roblox.com/v2/users/${userid}/groups/roles`,
         json: true
       })
 
@@ -214,7 +214,7 @@ class DiscordServer {
       Cache.set(`bindings.${userid}`, '__groups', groups)
     }
 
-    return groups
+    return groups.data
   }
 
   /**
@@ -254,8 +254,8 @@ class DiscordServer {
 
         let rank = 0
         for (const groupObj of groups) {
-          if (groupObj.Id.toString() === group.id) {
-            rank = groupObj.Rank
+          if (groupObj.group.id.toString() === group.id) {
+            rank = groupObj.role.rank
             break
           }
         }

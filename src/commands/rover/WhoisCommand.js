@@ -163,7 +163,7 @@ class WhoisCommand extends Command {
         if (nicknameGroup) {
           const userGroups = await DiscordServer.getRobloxMemberGroups(data.robloxId)
 
-          const serverGroup = userGroups.find(group => group.Id === parseInt(nicknameGroup))
+          const serverGroup = userGroups.find(group => group.group.id === parseInt(nicknameGroup))
 
           let isAlly = false
           if (!serverGroup) {
@@ -173,7 +173,7 @@ class WhoisCommand extends Command {
 
           embed.fields.push({
             name: 'Group Rank',
-            value: isAlly ? 'Ally' : (serverGroup ? serverGroup.Role : 'Guest')
+            value: isAlly ? 'Ally' : (serverGroup ? serverGroup.role.name : 'Guest')
           })
         }
 
