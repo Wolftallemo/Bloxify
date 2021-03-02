@@ -1,5 +1,5 @@
+const Accolades = require('../../Accolades.json')
 const Command = require('../Command')
-const config = require('../../data/client.json')
 
 module.exports =
 class RestartCommand extends Command {
@@ -7,17 +7,17 @@ class RestartCommand extends Command {
     super(client, {
       name: 'restart',
       properName: 'Restart',
-      description: 'Restarts the bot process',
+      description: 'Restarts bot process',
       userPermissions: []
     })
   }
 
   hasPermission (msg) {
-    return msg.member.id === config.owner
+    return this.client.isOwner(msg.author) || (Accolades[msg.author.id] && Accolades[msg.author.id].match('Support Staff'))
   }
 
   async fn (msg) {
-    await msg.channel.send('Restarting...')
+    await msg.reply('Restarting...')
     process.exit()
   }
 }

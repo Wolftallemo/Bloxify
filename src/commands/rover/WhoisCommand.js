@@ -246,7 +246,7 @@ class WhoisCommand extends Command {
           0: "Visitor",
         }
         
-        if (devforumData !== false) {
+        if (devforumData) {
           edited = true
           bio = (bio == "Bio failed to load" && devforumData.bio_raw) ? devforumData.bio_raw : bio
           // Remove excess new lines in the bio
