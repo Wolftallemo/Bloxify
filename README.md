@@ -3,14 +3,14 @@
 </p>
 
 <p align="center">
-    <a href="https://discordapp.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="/assets/Add_RoVer.png" alt="Add" /></a>
+    <a href="https://discord.com/oauth2/authorize?client_id=298796807323123712&scope=bot&permissions=402656264"><img src="/assets/Add_RoVer.png" alt="Add" /></a>
 </p>
 
 <p align="center">
   <a href="https://www.patreon.com/erynlynn"><img src="http://i.imgur.com/dujYlAK.png" alt="Patreon"></a>
   <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
   <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/verified%20users-3.2M%2B-brightgreen.svg" alt="Verified Users"></a>
-  <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/total%20servers-101K%2B-brightgreen.svg" alt="Discord Servers"></a>
+  <a href="https://eryn.io/RoVer"><img src="https://img.shields.io/badge/total%20servers-108K%2B-brightgreen.svg" alt="Discord Servers"></a>
   <br>
   <a href="https://discord.gg/7yfwrat"><img src="https://img.shields.io/discord/425800792679645204.svg" alt="Discord"></a>
 </p>
@@ -21,7 +21,7 @@
 Self-hosting is recommended for advanced users only who are experienced with the Node.js ecosystem. Note that setup or code support will not be given for attempting to run your own instance of RoVer, modified or otherwise.
 
 1. To get RoVer ready to run locally, the first step is to clone this repository onto the machine you wish to run it on.
-2. **Node.js version 8.9.4 LTS or newer is recommended to run Virgil.**
+2. **Node.js version 12 LTS or newer is required to run Virgil.**
 3. Use NPM to install the dependencies from the project folder: `npm i`
 4. Edit the file `src/data/client.json` and insert your [bot token](https://discord.com/developers/applications/me).
 5. Start the bot from the project folder: `node ./src/index.js`
