@@ -7,7 +7,8 @@ class ExportConfigCommand extends Command {
       name: 'exportconfig',
       properName: 'ExportConfig',
       aliases: ['exportsettings'],
-      description: ''
+      description: 'Exports the current guild\'s configuration file',
+      throttling: { usages: 1, duration: 20 }
     })
   }
 
