@@ -3,7 +3,7 @@
     "@google-cloud/storage": "^5.8.3",
     "bufferutil": "^4.0.3",
     "common-tags": "^1.7.2",
-    "discord.js": "^12.5.1",
+    "discord.js": "^12.5.2",
     "discord.js-commando": "^0.12.3",
     "erlpack": "discordapp/erlpack",
     "express": "^4.17.1",
