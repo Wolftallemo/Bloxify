@@ -8,7 +8,7 @@
     "erlpack": "github:discord/erlpack",
     "express": "^4.17.1",
     "mz": "^2.7.0",
-    "pg": "^8.5.1",
+    "pg": "^8.6.0",
     "request": "^2.88.2",
     "request-debug": "^0.2.0",
     "request-promise": "^4.2.6",
