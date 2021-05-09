@@ -1,4 +1,4 @@
-/* global Cache */
+﻿/* global Cache */
 const { stripIndents } = require('common-tags')
 const config = require('./data/client.json')
 const Util = require('./Util')
