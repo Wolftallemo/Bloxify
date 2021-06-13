@@ -141,9 +141,9 @@ class WhoisCommand extends Command {
           }
 
           Cache.set(`bindings.${data.robloxId}`, 'bc', bc)
-        }
-      } catch (e) {}
 
+        }
+      } catch {}
       // Make sure the data is cached so we don't have to use the API in the future
       Cache.set('users', id, data)
 
@@ -164,12 +164,19 @@ class WhoisCommand extends Command {
           { name: 'Join Date', value: joinDate, inline: true }
         ]
       }
-
-      // Edit so past names don't show unless you actually have some!
-      if (pastNames && pastNames !== []) {
+        
+      if (apiUserData.displayName !== apiUserData.name) {
         embed.fields.push({
-          name: 'Past Usernames',
-          value: pastNames,
+          name: 'Display Name',
+          value: apiUserData.displayName,
+          inline: true
+        })
+      }
+    
+      if (bc && cookie) {
+        embed.fields.push({
+          name: 'Membership',
+          value: bc,
           inline: true
         })
       }
@@ -201,6 +208,8 @@ class WhoisCommand extends Command {
         })
       }
 
+      editMessage.edit({ embed: embed }).catch(console.error)
+
       if (Accolades.includes(id)) embed.fields.push({ name: 'User Tags', value: 'Virgil Contributor', inline: true })
       editMessage.edit({ embed: embed }).catch(console.error)
 
@@ -211,7 +220,7 @@ class WhoisCommand extends Command {
           simple: false,
           resolveWithFullResponse: true
         })
-        if (response.statusCode !== 404) {
+        if (response.statusCode === 200) {
           const shData = JSON.parse(response.body)
           Cache.set(`bindings.${data.robloxId}`, 'scriptingHelpers', shData)
           edited = true
@@ -256,9 +265,19 @@ class WhoisCommand extends Command {
 
       if (edited) {
         editMessage.edit({ embed: embed }).catch(console.error)
+        
+        // Edit so past names don't show unless you actually have some!
+        if (pastNames && pastNames !== []) {
+          embed.fields.push({
+            name: 'Past Usernames',
+            value: pastNames,
+            inline: false
+          })
+        }
+        editMessage.edit({ embed: embed }).catch(console.error)
+      } else {
+        editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
       }
-    } else {
-      editMessage.edit(`${member.displayName} doesn't seem to be verified.`)
     }
   }
 }
